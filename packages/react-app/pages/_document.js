@@ -1,7 +1,7 @@
-import * as React from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import * as React from "react";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 
-import { ServerStyleSheets } from '@material-ui/core/styles';
+import { ServerStyleSheets } from "@material-ui/core/styles";
 
 export default class MyDocument extends Document {
   render() {
@@ -10,14 +10,11 @@ export default class MyDocument extends Document {
         {/* SEO Part */}
         <Head>
           <meta name="theme-color" content="#ee6f57" />
-          {/* Template by https://amanraj.dev/ */}
 
           <link rel="shortcut icon" href="/favicon.ico" />
           <link rel="apple-touch-icon" href="/icons/logo.png" />
           <meta name="theme-color" content="#000000" />
 
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
           <link rel="apple-touch-icon" href="/icons/logo.png" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -26,7 +23,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body style={{ backgroundColor: '#F8F9FA' }}>
+        <body style={{ backgroundColor: "#F8F9FA" }}>
           <Main />
           <NextScript />
         </body>

@@ -1,4 +1,4 @@
-import { red, amber, grey } from "@material-ui/core/colors";
+import { red, amber } from "@material-ui/core/colors";
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 const fontFamilyRoboto = {
@@ -8,8 +8,8 @@ const fontFamilyRoboto = {
     "sans-serif",
     '"Apple Color Emoji"',
     '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"'
-  ].join(",")
+    '"Segoe UI Symbol"',
+  ].join(","),
 };
 
 const fontFamilyMetropolis = {
@@ -19,9 +19,9 @@ const fontFamilyMetropolis = {
     "sans-serif",
     '"Apple Color Emoji"',
     '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"'
+    '"Segoe UI Symbol"',
   ].join(","),
-  letterSpacing: "0.015rem"
+  letterSpacing: "0.015rem",
 };
 
 // A custom theme for this app
@@ -29,64 +29,64 @@ const lightMuiTheme = createMuiTheme({
   type: "light",
   palette: {
     primary: {
-      main: "#FFF"
+      main: "#FFF",
     },
     secondary: {
       main: amber[500],
-      light: "#feefc3"
+      light: "#feefc3",
     },
     error: {
-      main: red.A400
+      main: red.A400,
     },
     background: {
       default: "#FFF",
-      highlight: "#F1F3F4"
-    }
+      highlight: "#F1F3F4",
+    },
   },
   custom: {
     fontFamily: {
       roboto: fontFamilyRoboto,
-      metropolis: fontFamilyMetropolis
+      metropolis: fontFamilyMetropolis,
     },
     palette: {
       iconColor: "#5f6368",
-      btn: "#cceabb"
-    }
-  }
+      btn: "#cceabb",
+    },
+  },
 });
 
 const darkMuiTheme = createMuiTheme({
   type: "dark",
   palette: {
     primary: {
-      main: "#33313b"
+      main: "#33313b",
     },
     secondary: {
       main: amber[500],
-      light: "#41331C"
+      light: "#41331C",
     },
     error: {
-      main: red.A400
+      main: red.A400,
     },
     background: {
       default: "#33313b",
-      highlight: "#535456"
+      highlight: "#535456",
     },
     text: {
       primary: "#E8EAED",
-      secondary: "#FFFFFFDE"
-    }
+      secondary: "#FFFFFFDE",
+    },
   },
   custom: {
     fontFamily: {
       roboto: fontFamilyRoboto,
-      metropolis: fontFamilyMetropolis
+      metropolis: fontFamilyMetropolis,
     },
     palette: {
       iconColor: "#949596",
-      btn: "#4592af"
-    }
-  }
+      btn: "#4592af",
+    },
+  },
 });
 
 export const lightTheme = responsiveFontSizes(lightMuiTheme);

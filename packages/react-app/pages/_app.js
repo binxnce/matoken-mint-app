@@ -1,58 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
+import React from "react";
+import Head from "next/head";
 
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { Web3ReactProvider } from "@web3-react/core";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import * as ethers from "ethers";
 
-import Navbar from '../components/Navbar';
+import Navbar from "../components/Navbar";
+import Web3ReactManager from "../components/Web3ReactManager";
 
 const App = ({ Component, pageProps }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [contract_1155, setContract_1155] = useState(null);
-  const [contract_721, setContract_721] = useState(null);
-  const [signerAddress, setSignerAddress] = useState("");
-  const [networkId, setNetworkId] = useState('');
-
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-    // Naive check for mobile
-    setIsMobile(
-      navigator.userAgent.match(
-        /(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i
-      )
-    )
-  }, []);
-
   return (
     <React.Fragment>
       <Head>
-        <title>Polygon | NFT Minter</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <title>MAToken Mint</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
       </Head>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />
-      <Navbar
-        {...pageProps}
-        signerAddress={signerAddress}
-        setContract_1155={setContract_1155}
-        setContract_721={setContract_721}
-        setSignerAddress={setSignerAddress}
-        setNetworkId={setNetworkId}
-      />
-      <Component
-        {...pageProps}
-        isMobile={isMobile}
-        signerAddress={signerAddress}
-        contract_1155={contract_1155}
-        contract_721={contract_721}
-        networkId={networkId}
-      />
+      <Web3ReactProvider
+        getLibrary={(provider) => new ethers.providers.Web3Provider(provider)}
+      >
+        <Web3ReactManager>
+          <Navbar {...pageProps} />
+          <Component {...pageProps} />
+        </Web3ReactManager>
+      </Web3ReactProvider>
     </React.Fragment>
   );
-}
+};
 
 export default App;
