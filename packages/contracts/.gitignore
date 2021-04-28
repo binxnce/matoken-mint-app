@@ -2,6 +2,7 @@
 node_modules
 
 # Secrets
+.DS_Store
 .env
 
 # Hardhat files
