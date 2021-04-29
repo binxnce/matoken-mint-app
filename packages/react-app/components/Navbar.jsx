@@ -19,20 +19,20 @@ const Navbar = () => {
       <Toolbar className={classes.rootTool}>
         <Link href="/">
           <a>
-            <img src="/logo.svg" alt="logo" className={classes.img} />
+            <img src="/logo.svg" alt="MAToken Press | Press Music Album NFTs to the blockchain" className={classes.img} />
           </a>
         </Link>
 
-        <Typography variant="h6" className={classes.title}>
-          MAToken Mint
+{/*        <Typography variant="h6" className={classes.title}>
+          MAToken Press 
         </Typography>
 
         <div className={classes.divider}></div>
 
         <Typography variant="h6" className={classes.title2}>
-          Mint music album NFTs
+          Press music album NFTs to the Blockchain
         </Typography>
-
+*/}
         <div className={classes.gap}></div>
 
         {!account && <ConnectWallet />}
@@ -63,10 +63,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   img: {
-    width: 150,
+    width: 220,
     marginRight: 20,
     [theme.breakpoints.down("xs")]: {
-      width: 130,
+      width: 180,
+      marginLeft: 10,
     },
   },
   title: {

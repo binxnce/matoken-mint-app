@@ -8,8 +8,9 @@
 
 In the `/contracts` package:
 
+- install dependancices if haven't already 'npm install hardhat'
 - start a local blockchain by running `npm run chain`
-- deploy `NFTMinter` contract via `npx hardhat --network localhost ./scripts/deploy.js`
+- deploy `NFTMinter` contract via `npx hardhat --network localhost run ./scripts/deploy.js`
 
 In the `/react-app` package:
 
