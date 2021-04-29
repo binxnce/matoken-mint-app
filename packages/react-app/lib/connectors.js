@@ -8,7 +8,7 @@ export const CACHED_CONNECTOR_KEY = "WEB3_REACT_CACHED_CONNECTOR";
 
 export const injected = new InjectedConnector({
   // TODO: Add support for mainnet
-  supportedChainIds: [1, 5, 31337],
+  supportedChainIds: [1, 5, 1337],
 });
 
 export const walletConnect = new WalletConnectConnector({
