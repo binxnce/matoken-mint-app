@@ -116,7 +116,7 @@ const Form = ({
       );
       nftMinter
         .connect(library.getSigner(account))
-        .mint(account, ercTwoNum, ipfasHash.toString("hex"))
+        .mint(account, ercTwoNum, "0x" + ipfsHash.toString("hex"))
         .then(
           (tx) => tx.wait() && toast("Successfully minted", { type: "success" })
         );
