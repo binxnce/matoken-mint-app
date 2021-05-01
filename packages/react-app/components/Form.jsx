@@ -19,7 +19,7 @@ const Form = ({
   setIsLoading,
   setTrsHash,
   setErr,
-  setOpen
+  setOpen,
 }) => {
   const { account, library } = useWeb3React();
 
@@ -28,7 +28,7 @@ const Form = ({
   // Hooks
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [surl, setSurl] = useState('');
+  const [surl, setSurl] = useState("");
   const [url, setUrl] = useState("");
   const [file, setFile] = useState(null);
   const [imgSrc, setImgSrc] = useState("");
@@ -116,7 +116,7 @@ const Form = ({
       );
       nftMinter
         .connect(library.getSigner(account))
-        .mint(account, ercTwoNum, ipfsHash)
+        .mint(account, ercTwoNum, ipfasHash.toString("hex"))
         .then(
           (tx) => tx.wait() && toast("Successfully minted", { type: "success" })
         );
@@ -236,8 +236,8 @@ const Form = ({
 
         <div className={classes.lastSec}>
           <div className={classes.note}>
-            Once your MAToken NFT is minted on the Polygon blockchain, you will not be
-            able to edit or update any of its information.
+            Once your MAToken NFT is minted on the Polygon blockchain, you will
+            not be able to edit or update any of its information.
           </div>
           <Button
             type="submit"
