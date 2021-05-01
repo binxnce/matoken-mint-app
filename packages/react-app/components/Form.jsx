@@ -13,7 +13,14 @@ toast.configure();
 
 import NFTMinter from "../abis/NFTMinter.json";
 
-const Form = () => {
+const Form = ({
+  signerAddress,
+  contract_1155,
+  setIsLoading,
+  setTrsHash,
+  setErr,
+  setOpen
+}) => {
   const { account, library } = useWeb3React();
 
   const classes = useStyles();
@@ -21,10 +28,12 @@ const Form = () => {
   // Hooks
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [surl, setSurl] = useState('');
   const [url, setUrl] = useState("");
   const [file, setFile] = useState(null);
   const [imgSrc, setImgSrc] = useState("");
   const [imgHash, setImgHash] = useState("");
+  const [ercTwoNum, setErcTwoNum] = useState(1);
   const [errors, setErrors] = useState({
     name: "",
     desc: "",
@@ -56,9 +65,9 @@ const Form = () => {
   // Handle file upload
   const handleFile = async (event) => {
     if (event.target.files[0]?.size < 1e7) {
-      setFile(e.target.files[0]);
+      setFile(event.target.files[0]);
 
-      const cid = await pinFileToIPFS(e.target.files[0]);
+      const cid = await pinFileToIPFS(event.target.files[0]);
       toast("File uploaded to IPFS", { type: "success" });
 
       setImgHash(cid);
@@ -103,7 +112,7 @@ const Form = () => {
       const nftMinter = new ethers.Contract(
         process.env.NEXT_PUBLIC_NFT_MINTER_ADDRESS,
         NFTMinter,
-        account
+        library.getSigner(account)
       );
       nftMinter
         .connect(library.getSigner(account))
@@ -203,7 +212,7 @@ const Form = () => {
             onChange={(e) => {
               setErrors((pS) => ({ ...pS, desc: "" }));
               setErr("");
-              setDesc(e.target.value);
+              setDescription(e.target.value);
             }}
             onBlur={validateDescription}
             required
@@ -227,7 +236,7 @@ const Form = () => {
 
         <div className={classes.lastSec}>
           <div className={classes.note}>
-            Once your NFT is minted on the Polygon blockchain, you will not be
+            Once your MAToken NFT is minted on the Polygon blockchain, you will not be
             able to edit or update any of its information.
           </div>
           <Button
@@ -412,17 +421,17 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   submit: {
-    background: "#8247E5",
+    background: "#15a64f",
     padding: "11px 30px",
     fontSize: 16,
     color: "#FFFFFF",
     borderRadius: 37,
     marginTop: 10,
     "&:hover": {
-      background: "#8247E5",
+      background: "#018837",
     },
     "&:disabled": {
-      background: "#9c67f5",
+      background: "#70c290",
     },
   },
   error: {
