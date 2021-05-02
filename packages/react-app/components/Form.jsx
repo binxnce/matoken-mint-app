@@ -213,7 +213,7 @@ const Form = ({
                 Upload a static album cover art / preview file
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-                JPG or PNG accepted. 10MB limit.
+                JPG or PNG accepted. 10MB limit. Square image. 1600px recommended.
               </Typography>
             </React.Fragment>
           )}
@@ -239,13 +239,13 @@ const Form = ({
           {!imgSrc && (
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-               (optional)
+               (optional - shown only when supported)
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle}>
-                Upload animated cover art / preview (when supported)
+                Upload animated cover art / preview 
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-                GIF, MP4, MOV or HTML videos accepted. 10MB limit.
+                GIF, MP4, MOV or HTML videos accepted. 10MB limit. Square ratio.
               </Typography>
             </React.Fragment>
           )}
