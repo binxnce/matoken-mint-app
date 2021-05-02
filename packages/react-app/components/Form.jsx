@@ -239,7 +239,7 @@ const Form = ({
           {!imgSrc && (
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-               (optional - shown only when supported)
+               (optional - shown only where supported)
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle}>
                 Upload animated cover art / preview 
@@ -330,6 +330,16 @@ const Form = ({
                 Bonus Content (optional)
         </Typography>
 
+        <div  className={classes.headerMain}>
+        <select className={classes.formGroupInput}>
+            <option value="Default">Select Number of Bonus Content Files (Default 0)</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          </div>
 
          <div className={classes.musicupload}>
             
@@ -526,8 +536,6 @@ const Form = ({
             onChange={(e) => setSurl(e.target.value)}
           />
         </div>
-
-       
         </div>
 
         <div className={classes.halfContainer}>
@@ -745,7 +753,186 @@ const Form = ({
             required
           ></textarea>
         </div>
-         
+        <Typography variant="h6" className={classes.headerMain}>
+                Economic Details
+        </Typography>
+
+        <div className={classes.halfContainer}>
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Album Initial Sale Price
+          </label>
+          <input
+            type="url"
+            placeholder="$5"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Copies Available
+          </label>
+          <input
+            type="url"
+            placeholder="1000"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+        </div>
+
+        <div className={classes.halfContainer}>
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Initial Sale End Date Action
+          </label>
+          <select className={classes.formGroupInput}>
+            <option value="Default">Select: (Default Add to Pool)</option>
+            <option value="Funk">Add Remaining Albums to Pool + Enable Trading</option>
+            <option value="Psy">Burn Remaining Albums + Enable Trading</option>
+            <option value="Reggae">Stop Sale and Disable Trading</option>
+            <option value="Reggae">Continue Selling at Inital Price Until Sold Out</option>
+          </select>
+        </div>
+
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Initial Sale End Date
+          </label>
+          <select className={classes.formGroupInput}>
+            <option value="2">Default 2 Months</option>
+            <option value=".5">Two Weeks</option>
+            <option value="1">One Month</option>
+            <option value="2">Two Months</option>
+            <option value="3">Three Months</option>
+            <option value="4">Four Months</option>
+            <option value="5">Five Months</option>
+            <option value="6">Six Months</option>
+            <option value="12">One Year</option>
+            <option value="Future">Set Custom Date</option>
+          </select>
+          
+          <input
+            type="url"
+            placeholder="02-03-2018"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+        </div>
+
+        <div className={classes.halfContainer}>
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Max Copies per Customer
+          </label>
+          <input
+            type="url"
+            placeholder="5"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Max Copies per Reseller
+          </label>
+          <input
+            type="url"
+            placeholder="100"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+        </div>
+
+          <label className={classes.formTitleLabel}>
+            Payout Info
+          </label>
+          <select className={classes.formGroupInput}>
+            <option value="Default">Select Payout Parties: (Default Artist Only)</option>
+            <option value="Psy">Artist Only</option>
+            <option value="Funk">Label Only</option>
+            <option value="Reggae">Artist + Label</option>
+            <option value="House">Artist, Label + Third Party</option>
+            <option value="Custom">Artist + Third Party</option>
+            <option value="Custom">Label + Third Party</option>
+            <option value="Custom">Third Party</option>
+          </select>
+
+        <div className={classes.halfContainer}>
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Artist Payout Percentage
+          </label>
+          <input
+            type="url"
+            placeholder="40%"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Artist Payout Address
+          </label>
+          <input
+            type="url"
+            placeholder="0xe3rw..."
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+        </div>
+
+        <div className={classes.halfContainer}>
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Label Payout Percentage
+          </label>
+          <input
+            type="url"
+            placeholder="60%"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            Label Payout Address
+          </label>
+          <input
+            type="url"
+            placeholder="0xe3rw..."
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+        </div>
+
         <div className={classes.lastSec}>
           <div className={classes.note}>
             Once your MAToken NFT is minted on the Polygon blockchain, you will
