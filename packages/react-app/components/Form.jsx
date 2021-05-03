@@ -502,6 +502,26 @@ const Form = ({
           ></textarea>
         </div>
 
+        <div className={classes.formTitle}>
+        <label className={classes.formTitleLabel}>Company Credits</label>
+          <textarea
+            type="text"
+            style={{
+              border: "1px solid black",
+            }}
+            className={classes.formGroupInputDesc}
+            value={description}
+            placeholder="Published By, Recorded At, Distributed by, Copyright Info"
+            onChange={(e) => {
+              setErrors((pS) => ({ ...pS, desc: "" }));
+              setErr("");
+              setDescription(e.target.value);
+            }}
+            onBlur={validateDescription}
+            required
+          ></textarea>
+        </div>
+
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
@@ -734,25 +754,7 @@ const Form = ({
           
         </div>
         </div> */}
-        <div className={classes.formTitle}>
-        <label className={classes.formTitleLabel}>Company Credits</label>
-          <textarea
-            type="text"
-            style={{
-              border: "1px solid black",
-            }}
-            className={classes.formGroupInputDesc}
-            value={description}
-            placeholder="Published By, Recorded At, Distributed by, Copyright Info"
-            onChange={(e) => {
-              setErrors((pS) => ({ ...pS, desc: "" }));
-              setErr("");
-              setDescription(e.target.value);
-            }}
-            onBlur={validateDescription}
-            required
-          ></textarea>
-        </div>
+        
         <Typography variant="h6" className={classes.headerMain}>
                 Economic Details
         </Typography>
@@ -760,7 +762,7 @@ const Form = ({
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Album Initial Sale Price
+            Initial Sale Price
           </label>
           <input
             type="url"
@@ -772,9 +774,23 @@ const Form = ({
           />
         </div>
 
+        <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Copies Available
+            Initial Copies
+          </label>
+          <input
+            type="url"
+            placeholder="1000"
+            className={classes.formGroupInput}
+            value={url}
+            pattern="https?://.+"
+            onChange={(e) => setSurl(e.target.value)}
+          />
+        </div>
+        <div className={classes.formTitleHalf}>
+          <label className={classes.formTitleLabel}>
+            On Hold in Pool
           </label>
           <input
             type="url"
@@ -786,6 +802,7 @@ const Form = ({
           />
         </div>
         </div>
+        </div>
 
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
@@ -794,10 +811,11 @@ const Form = ({
           </label>
           <select className={classes.formGroupInput}>
             <option value="Default">Select: (Default Add to Pool)</option>
-            <option value="Funk">Add Remaining Albums to Pool + Enable Trading</option>
-            <option value="Psy">Burn Remaining Albums + Enable Trading</option>
-            <option value="Reggae">Stop Sale and Disable Trading</option>
-            <option value="Reggae">Continue Selling at Inital Price Until Sold Out</option>
+            <option value="Funk">Add Remaining Albums to Pool + Enable Trading (Default Recommended)</option>
+            <option value="Psy">Burn Remaining Initial Copies + Enable Trading</option>
+            <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Enable Trading</option>
+            <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Disable Trading</option>
+            <option value="Reggae">Stop Sale + Disable Trading</option>
           </select>
         </div>
 
