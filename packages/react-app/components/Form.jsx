@@ -508,7 +508,7 @@ const Form = ({
             type="text"
             style={{
               border: "1px solid black",
-            }}
+            }}ds
             className={classes.formGroupInputDesc}
             value={description}
             placeholder="Published By, Recorded At, Distributed by, Copyright Info"
@@ -811,7 +811,7 @@ const Form = ({
           </label>
           <select className={classes.formGroupInput}>
             <option value="Default">Select: (Default Add to Pool)</option>
-            <option value="Funk">Add Remaining Albums to Pool + Enable Trading (Default Recommended)</option>
+            <option value="Funk">Add Remaining Initial Copies to Pool + Enable Trading (Default Recommended)</option>
             <option value="Psy">Burn Remaining Initial Copies + Enable Trading</option>
             <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Enable Trading</option>
             <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Disable Trading</option>
