@@ -213,7 +213,7 @@ const Form = ({
                 Upload a static album cover art / preview file
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-                JPG or PNG accepted. 10MB limit. Square image. 1600px recommended.
+                JPG, GIF, MP4, MOV, PNG or HTML videos accepted. 10MB limit. Square image. 1600px recommended.
               </Typography>
             </React.Fragment>
           )}
@@ -227,7 +227,7 @@ const Form = ({
           
           <label htmlFor="upload-file">
             <Button component="span" className={classes.uploadBtn}>
-              {file ? file.name : "Upload Static Art"}
+              {file ? file.name : "Upload Art"}
             </Button>
           </label>
           {errors.file && (
@@ -236,37 +236,7 @@ const Form = ({
             </Typography>
           )}
         
-          {!imgSrc && (
-            <React.Fragment>
-              <Typography variant="h6" className={classes.uploadTitle}>
-               (optional - shown only where supported)
-              </Typography>
-              <Typography variant="h6" className={classes.uploadTitle}>
-                Upload animated cover art / preview 
-              </Typography>
-              <Typography variant="h6" className={classes.uploadTitle2}>
-                GIF, MP4, MOV or HTML videos accepted. 10MB limit. Square ratio.
-              </Typography>
-            </React.Fragment>
-          )}
-          <input
-            accept="audio/*, video/*, image/*, .html, .pdf"
-            id="upload-file"
-            onChange={handleFile}
-            type="file"
-            hidden
-          />
           
-          <label htmlFor="upload-file">
-            <Button component="span" className={classes.uploadBtn}>
-              {file ? file.name : "Upload Animated Art"}
-            </Button>
-          </label>
-          {errors.file && (
-            <Typography variant="h6" className={classes.errUpload}>
-              {errors.file}
-            </Typography>
-          )}
         </div>
         <Typography variant="h6" className={classes.headerMain}>
                 Track Details
@@ -275,11 +245,6 @@ const Form = ({
         <div  className={classes.headerMain}>
         <select className={classes.formGroupInput}>
             <option value="Default">Select Album Type: (Default Basic Single)</option>
-            <option value="Psy">Basic Single (1 Track)</option>
-            <option value="Psy">Single (1 Track + Mixes/Edits/Remixes)</option>
-            <option value="Funk">EP  (3-7 Tracks)</option>
-            <option value="Reggae">LP  (7-10 Tracks)</option>
-            <option value="House">Album (10+ Tracks)</option>
           </select>
           </div>
 
@@ -295,7 +260,7 @@ const Form = ({
                  TRACK #1: Upload Music File
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-                MP3, WAV, AIFF audio files accepted. 100MB limit.
+                MP3, WAV, AIFF audio files accepted. 10MB limit.
               </Typography>
             </React.Fragment>
           )}
@@ -330,17 +295,6 @@ const Form = ({
                 Bonus Content (optional)
         </Typography>
 
-        <div  className={classes.headerMain}>
-        <select className={classes.formGroupInput}>
-            <option value="Default">Select Number of Bonus Content Files (Default 0)</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          </div>
-
          <div className={classes.musicupload}>
             
           <img src="img/bonuscontent.svg" alt="upload" />
@@ -350,7 +304,7 @@ const Form = ({
                  Upload Bonus Content #1
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-               JPG, PNG, TIFF, EPS, MP4, MP3, WAV, AIFF, PDF accepted. 100MB limit.
+               JPG, PNG, TIFF, EPS, MP4, MP3, WAV, AIFF, PDF accepted. 10MB limit.
               </Typography>
             </React.Fragment>
           )}
@@ -362,28 +316,7 @@ const Form = ({
             type="file"
             hidden
           />
-                <div className={classes.formTitleHalf}>
-          <label htmlFor="upload-file-2">
-          <label className={classes.formTitleLabel}>
-            Content Description
-          </label>
-          <textarea
-            type="text"
-            style={{
-              border: errors.desc ? "1px solid tomato" : "1px solid black",
-            }}
-            className={classes.formGroupInputDesc}
-            value={description}
-            placeholder="A description about your Bonus Content"
-            onChange={(e) => {
-              setErrors((pS) => ({ ...pS, desc: "" }));
-              setErr("");
-              setDescription(e.target.value);
-            }}
-            onBlur={validateDescription}
-            required
-          ></textarea>
-          </label></div>
+               
           <label htmlFor="upload-file-1">
             <Button component="span" className={classes.uploadBtn}>
               {musicFile ? musicFile.name : "Upload Bonus Content"}
@@ -525,61 +458,34 @@ const Form = ({
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Album Web / Discogs URL
-          </label>
-          <input
-            type="url"
-            placeholder="https://mylabelsite.com/example"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Release Date
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Current Date/Time</option>
-            <option value="Past">Past Release</option>
-            <option value="Future">Future Release (N/A coming soon)</option>
-          </select>
-          
-          <input
-            type="url"
-            placeholder="02-03-2018"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
             Genre
           </label>
 
           <select className={classes.formGroupInput}>
-            <option value="Default">Select Genre:</option>
-            <option value="Rock">Rock</option>
-            <option value="Electronic">Electronic</option>
-            <option value="HipHop">HipHop</option>
-            <option value="Custom">Custom</option>
+            <option value="">Select Genre:</option>
+            <option value="1">Pop</option>
+            <option value="2">Rock</option>
+            <option value="3">Metal / Heavy</option>
+            <option value="4">Electronic</option>
+            <option value="5">Underground Electronic</option>
+            <option value="6">Chillout/Ambient</option>
+            <option value="7">HipHop/Rap</option>
+            <option value="8">Funk / Disco</option>
+            <option value="9">R + B / Soul</option>
+            <option value="10">Reggae</option>
+            <option value="11">Latin</option>
+            <option value="12">Country</option>
+            <option value="13">Classical</option>
+            <option value="14">Folk/Regional</option>
+            <option value="15">Jazz</option>
+            <option value="16">Faith / Religous Music</option>
+            <option value="17">Acoustic / Instrumental</option>
+            <option value="18">Experimental</option>
+            <option value="19">Spoken Word / Vocal Only</option>
+            <option value="20">Samples / Sounds / Utility</option>
+            <option value="999">Custom</option>
           </select>
           
-          <input
-            type="url"
-            placeholder="Enter Custom Genre"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
         </div>
 
         <div className={classes.formTitleHalf}>
@@ -587,22 +493,28 @@ const Form = ({
             Sub Genre
           </label>
           <select className={classes.formGroupInput}>
-            <option value="Default">Select Sub Genre:</option>
-            <option value="Psy">Psychadellic</option>
-            <option value="Funk">Funk</option>
-            <option value="Reggae">Reggae</option>
-            <option value="House">House Music</option>
-            <option value="Custom">Custom</option>
+            <option value="">Select Sub Genre: (Default None)</option>
+            <option value="1">dance pop</option>
+            <option value="2">pop rap</option>
+            <option value="3">Reggae</option>
+            <option value="4">southern hip hop</option>
+            <option value="5">alternative rock</option>
+            <option value="6">alternative metal</option>
+            <option value="7">classic rock</option>
+            <option value="8">psychadellic rock</option>
+            <option value="9">latin pop</option>
+            <option value="10">techno</option>
+            <option value="11">trance</option>
+            <option value="12">electro house</option>
+            <option value="13">progressive house</option>
+            <option value="14">deep house</option>
+            <option value="15">synthpop</option>
+            <option value="16">reggaeton flow</option>
+            <option value="17">lo-fi</option>
+            <option value="18">christian rock</option>
+            <option value="99999">custom</option>
           </select>
           
-          <input
-            type="url"
-            placeholder="Enter Custom Sub Genre"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
         </div>
         </div>
 
@@ -635,125 +547,6 @@ const Form = ({
           />
         </div>
         </div>
-
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label Name
-          </label>
-          <input
-            type="url"
-            placeholder="Bohemian Yacht Club Music"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label URL
-          </label>
-          <input
-            type="url"
-            placeholder="http://www.bohemianyc.com"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-           Language
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">No Lyrics (Default)</option>
-            <option value="English">English</option>
-            <option value="French">French</option>
-            <option value="Spanish">Spanish</option>
-            <option value="Italian">Italian</option>
-            <option value="Portuguese">Portuguese</option>
-            <option value="German">German</option>
-            <option value="Dutch">Dutch</option>
-            <option value="Swedish">Swedish</option>
-            <option value="Polish">Polish</option>
-            <option value="Swedish">Greek</option>
-            <option value="Hindi">Hindi</option>
-            <option value="Bengali">Bengali</option>
-            <option value="Punjabi">Punjabi</option>
-            <option value="Hebrew">Hebrew</option>
-            <option value="Arabic">Arabic</option>
-            <option value="Turkish">Turkish</option>
-            <option value="Rusian">Russian</option>
-            <option value="Japanese">Japanese</option>
-            <option value="Chinese">Chinese (Manderin)</option>
-            <option value="Cantonese">Cantonese</option>
-            <option value="Korean">Korean</option>
-            <option value="Thai">Thai</option>
-            <option value="Vietnamese">Vietnamese</option>
-            <option value="Indonesian">Indonesian</option>
-            <option value="Swahili">Swahili</option>
-            <option value="Custom">Custom</option>
-          </select>
-          <input
-            type="url"
-            placeholder="English"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Content Rating
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Choose Content Rating</option>
-            <option value="C">C - Child Orientated Content</option>
-            <option value="G">G - Suitable for All Ages</option>
-            <option value="AA">AA - Recommended for 14+</option>
-            <option value="PA">PA - Parental Advisory</option>
-            <option value="X">X - Adults Only</option>
-          </select>
-          
-        </div>
-        </div>
-{/*}
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-           Release Region
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="WW">WW - Worldwide (Default)</option>
-            <option value="NA">NA - North America</option>
-          </select>
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Content Rating
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Choose Content Rating</option>
-            <option value="C">C - Child Orientated Content</option>
-            <option value="G">G - Suitable for All Ages</option>
-            <option value="AA">AA - Recommended for 14+</option>
-            <option value="PA">PA - Parental Advisory</option>
-            <option value="X">X - Adults Only</option>
-          </select>
-          
-        </div>
-        </div> */}
         
         <Typography variant="h6" className={classes.headerMain}>
                 Economic Details
@@ -807,49 +600,6 @@ const Form = ({
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Initial Sale End Date Action
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Select: (Default Add to Pool)</option>
-            <option value="Funk">Add Remaining Initial Copies to Pool + Enable Trading (Default Recommended)</option>
-            <option value="Psy">Burn Remaining Initial Copies + Enable Trading</option>
-            <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Enable Trading</option>
-            <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Disable Trading</option>
-            <option value="Reggae">Stop Sale + Disable Trading</option>
-          </select>
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Initial Sale End Date
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="2">Default 2 Months</option>
-            <option value=".5">Two Weeks</option>
-            <option value="1">One Month</option>
-            <option value="2">Two Months</option>
-            <option value="3">Three Months</option>
-            <option value="4">Four Months</option>
-            <option value="5">Five Months</option>
-            <option value="6">Six Months</option>
-            <option value="12">One Year</option>
-            <option value="Future">Set Custom Date</option>
-          </select>
-          
-          <input
-            type="url"
-            placeholder="02-03-2018"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
             Max Copies per Customer
           </label>
           <input
@@ -883,12 +633,6 @@ const Form = ({
           <select className={classes.formGroupInput}>
             <option value="Default">Select Payout Parties: (Default Artist Only)</option>
             <option value="Psy">Artist Only</option>
-            <option value="Funk">Label Only</option>
-            <option value="Reggae">Artist + Label</option>
-            <option value="House">Artist, Label + Third Party</option>
-            <option value="Custom">Artist + Third Party</option>
-            <option value="Custom">Label + Third Party</option>
-            <option value="Custom">Third Party</option>
           </select>
 
         <div className={classes.halfContainer}>
@@ -898,7 +642,7 @@ const Form = ({
           </label>
           <input
             type="url"
-            placeholder="40%"
+            placeholder="100%"
             className={classes.formGroupInput}
             value={url}
             pattern="https?://.+"
@@ -909,36 +653,6 @@ const Form = ({
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
             Artist Payout Address
-          </label>
-          <input
-            type="url"
-            placeholder="0xe3rw..."
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label Payout Percentage
-          </label>
-          <input
-            type="url"
-            placeholder="60%"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label Payout Address
           </label>
           <input
             type="url"
