@@ -649,7 +649,6 @@ const Form = ({
             placeholder="BYC002"
             className={classes.formGroupInput}
             value={catalogNum}
-            pattern="https?://.+"
             onChange={(e) => setCatalogNum(e.target.value)}
           />
         </div>
@@ -663,7 +662,6 @@ const Form = ({
             placeholder="721762628393"
             className={classes.formGroupInput}
             value={upcean}
-            pattern="https?://.+"
             onChange={(e) => setUPCEAN(e.target.value)}
           />
         </div>
@@ -686,7 +684,6 @@ const Form = ({
             }}
             className={classes.formGroupInput}
             value={initialPrice}
-            pattern="https?://.+"
             onChange={(e) => setInitialPrice(e.target.value)}
             onBlur={validateInitialPrice}
             required
@@ -707,7 +704,6 @@ const Form = ({
             }}
             className={classes.formGroupInput}
             value={initialCopies}
-            pattern="https?://.+"
             onChange={(e) => setInitialCopies(e.target.value)}
             onBlur={validateInitialCopies}
             required
@@ -727,7 +723,6 @@ const Form = ({
             }}
             className={classes.formGroupInput}
             value={onHoldPool}
-            pattern="https?://.+"
             onChange={(e) => setOnHoldPool(e.target.value)}
             onBlur={validateOnHoldPool}
             required
@@ -747,7 +742,6 @@ const Form = ({
             placeholder="5"
             className={classes.formGroupInput}
             value={maxCopiesCustomer}
-            pattern="https?://.+"
             onChange={(e) => setMaxCopiesCustomer(e.target.value)}
           />
         </div>
@@ -761,7 +755,6 @@ const Form = ({
             placeholder="100"
             className={classes.formGroupInput}
             value={maxCopiesReseller}
-            pattern="https?://.+"
             onChange={(e) => setMaxCopiesReseller(e.target.value)}
           />
         </div>
@@ -785,7 +778,6 @@ const Form = ({
             placeholder="100%"
             className={classes.formGroupInput}
             value={payoutAPercent}
-            pattern="https?://.+"
             onChange={(e) => setAPercent(e.target.value)}
           />
         </div>
@@ -799,7 +791,6 @@ const Form = ({
             placeholder="eth address 0xe3rw..."
             className={classes.formGroupInput}
             value={payoutAAddress}
-            pattern="https?://.+"
             onChange={(e) => setAAddress(e.target.value)}
           />
         </div>
