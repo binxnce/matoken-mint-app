@@ -384,9 +384,9 @@ const Form = ({
             type="file"
             hidden
           />
-          <label htmlFor="upload-file-1">
+          <label htmlFor="upload-file-2">
             <Button component="span" className={classes.uploadBtn}>
-              {musicFile ? musicFile.name : "Track Details"}
+              {"Track Details"}
             </Button>
           </label>
           <label htmlFor="upload-file-1">
