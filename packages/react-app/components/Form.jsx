@@ -226,7 +226,7 @@ const Form = ({
     validateInitialCopies();
     validateOnHoldPool();
 
-    if (name && description && file && imgHash) {
+    if (name && description && file && imgHash && track1) {
       // Upload JSON to IPFS
       let ipfsHash = "";
       try {
@@ -404,7 +404,7 @@ const Form = ({
   
         {/* Bonus content */}
         <Typography variant="h6"className={classes.headerMain}>
-                Bonus Content (optional)
+                Bonus Content
         </Typography>
 
          <div className={classes.musicupload}>
@@ -413,7 +413,7 @@ const Form = ({
         {(
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-                 Upload Bonus Content #1
+                 (optional) Upload Bonus Content #1
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
                JPG, PNG, TIFF, EPS, MP4, MP3, WAV, AIFF, PDF accepted. 10MB limit.
@@ -572,7 +572,12 @@ const Form = ({
             Genre *
           </label>
 
-          <select className={classes.formGroupInput}>
+          <select className={classes.formGroupInput} 
+          onChange={(e) => {
+              setErrors((pS) => ({ ...pS, genre: "" }));
+              setErr("");
+              setGenre(e.target.value);
+            }}>
             <option value="">Select Genre:</option>
             <option value="1">Pop</option>
             <option value="2">Rock</option>
@@ -603,7 +608,12 @@ const Form = ({
           <label className={classes.formTitleLabel}>
             Sub Genre
           </label>
-          <select className={classes.formGroupInput}>
+          <select className={classes.formGroupInput}
+            onChange={(e) => {
+              setErrors((pS) => ({ ...pS, subgenre: "" }));
+              setErr("");
+              setSubGenre(e.target.value);
+            }}>
             <option value="">Select Sub Genre: (Default None)</option>
             <option value="1">dance pop</option>
             <option value="2">pop rap</option>
