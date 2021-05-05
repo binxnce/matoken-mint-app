@@ -235,7 +235,32 @@ const Form = ({
           external_url: aurl,
           image: "https://gateway.pinata.cloud/ipfs/" + imgHash,
           name: name + " - " + title,
-          attributes: [["trait_type: numtracks", "value: 1"],["trait_type: artistname", "value: " + name],["trait_type: base", "value: starfish"],["trait_type: base", "value: starfish"],["trait_type: genre", "value: " + genre],["trait_type: subgenre", "value: " + subgenre],["trait_type: releasedate", "value: "+Date],["trait_type: UPC", "value: "+upcean],["trait_type: Catalog Number", "value: "+catalogNum],["trait_type: Album Type", "value: Single"]],
+          attributes: [
+            {
+              trait_type: "numtracks",
+              value: 1
+            },  {
+              trait_type: "artistname",
+              value: name
+            },  {
+              trait_type: "genre",
+              value: genre
+            },  {
+              trait_type: "subgenre",
+              value: subgenre
+            },  {
+              trait_type: "releasedate",
+              value: 1
+            },  {
+              trait_type: "UPC",
+              value: upcean
+            },  {
+              trait_type: "catalognumber",
+              value: catalogNum,
+            },  {
+              trait_type: "albumtype",
+              value: "Single"
+            }],
           album_title: title,
           artist_name: name,
           album_desc: description,
@@ -245,8 +270,8 @@ const Form = ({
           album_subgenre: subgenre,
           album_catalogNum: catalogNum,
           album_UPCEAN: upcean,
-          track1: "https://gateway.pinata.cloud/ipfs/" + imgHash,
-          bonus: "https://gateway.pinata.cloud/ipfs/" + imgHash,
+          track1: musicHash ? "https://gateway.pinata.cloud/ipfs/" + musicHash : "",
+          bonus: bonusHash ? "https://gateway.pinata.cloud/ipfs/" + bonusHash : "",
         });
         toast("JSON data uploaded to IPFS", { type: "success" });
       } catch (error) {
@@ -397,14 +422,14 @@ const Form = ({
           )}
 
           <input
-            accept="audio/*"
-            id="upload-file-1"
+            accept="audio/*, video/*, image/*, .html, .pdf"
+            id="upload-bonus"
             onChange={handleBonusFile}
             type="file"
             hidden
           />
                
-          <label htmlFor="upload-file-1">
+          <label htmlFor="upload-bonus">
             <Button component="span" className={classes.uploadBtn}>
               {bonusFile ? bonusFile.name : "Upload Bonus Content"}
             </Button>
