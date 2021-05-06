@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 toast.configure();
 
 import connectors, { activateConnector } from "../lib/connectors";
+import { SdkService } from "../services/SdkService";
 
 const ConnectWallet = ({ buttonClassName }) => {
   const web3ReactContext = useWeb3React();

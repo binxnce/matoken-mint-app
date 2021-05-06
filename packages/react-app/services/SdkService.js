@@ -6,12 +6,12 @@ import {
   prepareAddress,
 } from 'etherspot';
 import { utils } from 'ethers';
+import {EnvNames} from 'etherspot';
+import { ContractNames, getContractAbi} from '@matokenswap/contracts';
 import Service from './Service';
 import sdkStateStorage from './SdkStateStorage';
 import sdkSessionStorage from './SdkSessionStorage';
 import httpUtils from '../utils/http';
-import erc20Abi from '../utils/erc20.abi.json';
-import config from '../config';
 
 /**
  * @typedef {import('etherspot').Sdk} Sdk
@@ -27,9 +27,9 @@ class SdkService extends Service {
   /** @type {Sdk} */
   sdk;
   defaultSdkOptions = {
-    env: config.etherspot.env,
-    networkName: config.etherspot.networkName,
-    projectKey: config.etherspot.projectKey,
+    env: EnvNames.LocalNets,
+    networkName: 'localA',
+    projectKey: 'matokenswap-mint',
     omitWalletProviderNetworkCheck: true,
   };
 
@@ -224,6 +224,7 @@ class SdkService extends Service {
   }
 
   getParamsForTokenTransfer(token, receiver, balance) {
+    const erc20Abi = getContractAbi(ContractNames.ERC20);
     if (!token) {
       return {
         to: receiver,

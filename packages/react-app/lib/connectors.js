@@ -7,14 +7,15 @@ import { getLocal, removeLocal, setLocal } from "./local";
 export const CACHED_CONNECTOR_KEY = "WEB3_REACT_CACHED_CONNECTOR";
 
 export const injected = new InjectedConnector({
-  // TODO: Add support for mainnet
-  supportedChainIds: [1, 5, 1337],
+  // TODO: Add support for matic
+  supportedChainIds: [137, 80001 ],
 });
 
 export const walletConnect = new WalletConnectConnector({
   rpc: {
-    // Mainnet only
-    1: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`,
+    //1: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`,
+    137: 'https://rpc-mainnet.maticvigil.com',
+    80001: 'https://rpc-mumbai.maticvigil.com',
   },
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,
@@ -23,7 +24,7 @@ export const walletConnect = new WalletConnectConnector({
 
 export const walletLink = new WalletLinkConnector({
   // Mainnet only
-  url: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`,
+  url: 'https://rpc-mainnet.maticvigil.com',
   appName: "MAToken Mint",
   appLogoUrl: "",
 });
@@ -97,13 +98,13 @@ export default [
     connector: injected,
   },
   {
-    name: "wallet-link",
-    displayName: "Coinbase Wallet",
-    connector: walletLink,
-  },
-  {
     name: "wallet-connect",
     displayName: "WalletConnect",
     connector: walletConnect,
+  },
+  {
+    name: "wallet-link",
+    displayName: "Torus",
+    connector: walletLink,
   },
 ];
