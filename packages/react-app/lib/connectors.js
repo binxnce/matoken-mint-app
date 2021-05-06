@@ -1,6 +1,5 @@
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { WalletLinkConnector } from "@web3-react/walletlink-connector";
 
 import { getLocal, removeLocal, setLocal } from "./local";
 
@@ -21,12 +20,7 @@ export const walletConnect = new WalletConnectConnector({
   pollingInterval: 15000,
 });
 
-export const walletLink = new WalletLinkConnector({
-  // Mainnet only
-  url: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`,
-  appName: "MAToken Mint",
-  appLogoUrl: "",
-});
+export const torusConnect = "";
 
 export const getConnectorName = (connector) => {
   if (connector instanceof InjectedConnector) {
@@ -34,9 +28,6 @@ export const getConnectorName = (connector) => {
   }
   if (connector instanceof WalletConnectConnector) {
     return "wallet-connect";
-  }
-  if (connector instanceof WalletLinkConnector) {
-    return "wallet-link";
   }
   return "";
 };
@@ -49,8 +40,8 @@ const getConnector = (name) => {
       return injectedMobile;
     case "wallet-connect":
       return walletConnect;
-    case "wallet-link":
-      return walletLink;
+    case "torusConnect":
+      return torusConnect;
     default:
       return null;
   }
@@ -97,13 +88,14 @@ export default [
     connector: injected,
   },
   {
-    name: "wallet-link",
-    displayName: "Coinbase Wallet",
-    connector: walletLink,
-  },
-  {
     name: "wallet-connect",
     displayName: "WalletConnect",
     connector: walletConnect,
   },
+  {
+    name: "torus",
+    displayName: "torus",
+    connector: torusConnect,
+  },
+
 ];

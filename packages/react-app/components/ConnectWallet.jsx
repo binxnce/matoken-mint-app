@@ -2,6 +2,10 @@ import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import { NoEthereumProviderError } from "@web3-react/injected-connector";
 import React from "react";
 import Popup from "reactjs-popup";
+import 'reactjs-popup/dist/index.css';
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,25 +31,28 @@ const ConnectWallet = ({ buttonClassName }) => {
   return (
     <Popup
       trigger={
-        <button type="button" className={buttonClassName}>
+        <Button type="button" className={buttonClassName}>
           Connect Wallet
-        </button>
+        </Button>
       }
-      position="bottom right"
+      position="right center"
       contentStyle={{
         width: "min-content",
         padding: "10px",
+        textAlign: "center",
       }}
+      modal
+      nested
     >
       {connectors.map(({ name, displayName, connector }) => (
         <div key={name} className="flex hover:bg-gray-200">
-          <button
+          <Button
             type="button"
             className="whitespace-nowrap p-2 focus:outline-none"
             onClick={() => onActivate(connector)}
           >
             {displayName}
-          </button>
+          </Button>
         </div>
       ))}
     </Popup>
