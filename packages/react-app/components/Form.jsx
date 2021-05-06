@@ -25,42 +25,104 @@ const Form = ({
 
   const classes = useStyles();
 
-  // Hooks
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [surl, setSurl] = useState("");
-  const [url, setUrl] = useState("");
-  const [file, setFile] = useState(null);
-  const [musicFile, setMusicFile] = useState(null);
-  const [imgSrc, setImgSrc] = useState("");
-  const [imgHash, setImgHash] = useState("");
-  const [musicHash, setMusicHash] = useState("");
-  const [ercTwoNum, setErcTwoNum] = useState(1);
+  // Left Column Hooks
+  const [file, setFile] = useState(null); //image file name
+  const [imgHash, setImgHash] = useState(""); //image file hash
+  const [imgSrc, setImgSrc] = useState(""); //image file source
+  const [musicFile, setMusicFile] = useState(null); // music file name
+  const [musicHash, setMusicHash] = useState(""); // music file hash
+  const [musicSrc, setMusicSrc] = useState(""); //music file source
+  const [bonusFile, setBonusFile] = useState(null); // bonus file name
+  const [bonusHash, setBonusHash] = useState(""); // bonus file hash
+  const [bonusSrc, setBonusSrc] = useState(""); //bonus file source
+
+  // Album Info Hooks
+  const [name, setAName] = useState(""); //artist name
+  const [aurl, setAurl] = useState(""); //artist url
+  const [title, setTitle] = useState(""); //album title
+  const [description, setDescription] = useState(""); //album description
+  const [credits, setCredits] = useState(""); //album human credits
+  const [companyCredits, setCompanyCredits] = useState(""); //album company credits
+  const [genre, setGenre] = useState(""); //album genre
+  const [subgenre, setSubGenre] = useState(""); //album subgenre
+  const [catalogNum, setCatalogNum] = useState(""); //album catalog number
+  const [upcean, setUPCEAN] = useState(""); //album UPC / EAN
+
+  // Economic Detail Hooks
+  const [initialPrice, setInitialPrice] = useState(""); //Intitial Sale Price
+  const [initialCopies, setInitialCopies] = useState(""); //Intitial Copies
+  const [onHoldPool, setOnHoldPool] = useState(""); //On Hold In Pool
+  const [maxCopiesCustomer, setMaxCopiesCustomer] = useState(""); //Max Copies per Customer
+  const [maxCopiesReseller, setMaxCopiesReseller] = useState(""); //Max Copies per Reseller
+  const [payoutAPercent, setAPercent] = useState(""); //Payout - Artist Percentage
+  const [payoutAAddress, setAAddress] = useState(""); //Payout - Artist Payout Address (hash)
+  
+  // Clear Error Handling Hooks
   const [errors, setErrors] = useState({
     name: "",
     desc: "",
     file: "",
   });
 
-  // Validate form
+  // Validate formfileds
   const validateName = () => {
     if (name === "") {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        name: "Name cannot be empty",
+        name: "Required",
       }));
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, name: "" }));
+    }
+  };
+  const validateTitle = () => {
+    if (title === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        title: "Required",
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, title: "" }));
     }
   };
   const validateDescription = () => {
     if (description === "") {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        desc: "Add description for your token",
+        desc: "Add description for your token - Required",
       }));
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, desc: "" }));
+    }
+  };
+  const validateInitialPrice = () => {
+    if (initialPrice === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        initialPrice: "Required",
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, initialPrice: "" }));
+    }
+  };
+  const validateInitialCopies = () => {
+    if (initialCopies === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        initialCopies: "Required",
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, initialCopies: "" }));
+    }
+  };
+  const validateOnHoldPool = () => {
+    if (onHoldPool === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        onHoldPool: "Required",
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, onHoldPool: "" }));
     }
   };
 
@@ -69,13 +131,18 @@ const Form = ({
     if (event.target.files[0]?.size < 1e7) {
       setFile(event.target.files[0]);
 
+      //Check if cover art is a square image
+
+      //Send file to IPFS Storage
       const cid = await pinFileToIPFS(event.target.files[0]);
       toast("File uploaded to IPFS", { type: "success" });
 
       setImgHash(cid);
       setErrors((prevErrors) => ({ ...prevErrors, file: "" }));
 
+
       if (event.target.files.length !== 0) {
+        // Display Image Preview
         const reader = new FileReader();
         reader.onload = (event) => {
           setImgSrc(event.target.result);
@@ -95,7 +162,10 @@ const Form = ({
     if (event.target.files[0]?.size < 1e7) {
       setMusicFile(event.target.files[0]);
 
-      const cid = await pinFileToIPFS(event.target.files[1]);
+      // Check if file is correct format
+
+      // Send file to IPFS Storage
+      const cid = await pinFileToIPFS(event.target.files[0]);
       toast("File uploaded to IPFS", { type: "success" });
 
       setMusicHash(cid);
@@ -118,15 +188,15 @@ const Form = ({
     }
   };
   
-   // Handle MUSIC file upload
-   const handleMusicFile2 = async (event) => {
+   // Handle BONUS file upload
+   const handleBonusFile = async (event) => {
     if (event.target.files[0]?.size < 1e7) {
-      setMusicFile(event.target.files[0]);
+      setBonusFile(event.target.files[0]);
 
       const cid = await pinFileToIPFS(event.target.files[1]);
       toast("File uploaded to IPFS", { type: "success" });
 
-      setMusicHash(cid);
+      setBonusHash(cid);
       setErrors((prevErrors) => ({ ...prevErrors, file: "" }));
 
       if (event.target.files.length !== 0) {
@@ -141,7 +211,7 @@ const Form = ({
     } else {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        musicFile: "File should be less than 100MB",
+        bonusFile: "File should be less than 100MB",
       }));
     }
   };
@@ -150,23 +220,65 @@ const Form = ({
     event.preventDefault();
 
     validateName();
+    validateTitle();
     validateDescription();
+    validateInitialPrice();
+    validateInitialCopies();
+    validateOnHoldPool();
 
-    if (name && description && file && imgHash) {
-      // Upload files on IPFS
+    if (name && description && file && imgHash && track1) {
+      // Upload JSON to IPFS
       let ipfsHash = "";
       try {
         ipfsHash = await pinJSONToIPFS({
-          name,
-          description,
+          description: description,
+          external_url: aurl,
           image: "https://gateway.pinata.cloud/ipfs/" + imgHash,
-          external_url: url,
+          name: name + " - " + title,
+          attributes: [
+            {
+              trait_type: "numtracks",
+              value: 1
+            },  {
+              trait_type: "artistname",
+              value: name
+            },  {
+              trait_type: "genre",
+              value: genre
+            },  {
+              trait_type: "subgenre",
+              value: subgenre
+            },  {
+              trait_type: "releasedate",
+              value: 1
+            },  {
+              trait_type: "UPC",
+              value: upcean
+            },  {
+              trait_type: "catalognumber",
+              value: catalogNum,
+            },  {
+              trait_type: "albumtype",
+              value: "Single"
+            }],
+          album_title: title,
+          artist_name: name,
+          album_desc: description,
+          album_credits: credits,
+          album_companyCredits: companyCredits,
+          album_genre: genre,
+          album_subgenre: subgenre,
+          album_catalogNum: catalogNum,
+          album_UPCEAN: upcean,
+          track1: musicHash ? "https://gateway.pinata.cloud/ipfs/" + musicHash : "",
+          bonus: bonusHash ? "https://gateway.pinata.cloud/ipfs/" + bonusHash : "",
         });
         toast("JSON data uploaded to IPFS", { type: "success" });
       } catch (error) {
         console.log("Error Uploading files on IPFS", error);
       }
 
+      // Run Minting Process
       const nftMinter = new ethers.Contract(
         process.env.NEXT_PUBLIC_NFT_MINTER_ADDRESS,
         NFTMinter,
@@ -174,7 +286,7 @@ const Form = ({
       );
       nftMinter
         .connect(library.getSigner(account))
-        .mint(account, ercTwoNum, "0x" + Buffer.from(ipfsHash).toString("hex"))
+        .mint(account, initialCopies + onHoldPool, "0x" + Buffer.from(ipfsHash).toString("hex"))
         .then(
           (tx) => tx.wait() && toast("Successfully minted", { type: "success" })
         );
@@ -210,10 +322,10 @@ const Form = ({
           {!imgSrc && (
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-                Upload a static album cover art / preview file
+                Upload a static album cover art / preview file *
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-                JPG or PNG accepted. 10MB limit. Square image. 1600px recommended.
+                JPG, GIF, MP4, MOV, PNG or HTML videos accepted. 10MB limit. Square image. 1600px recommended.
               </Typography>
             </React.Fragment>
           )}
@@ -227,7 +339,7 @@ const Form = ({
           
           <label htmlFor="upload-file">
             <Button component="span" className={classes.uploadBtn}>
-              {file ? file.name : "Upload Static Art"}
+              {file ? file.name : "Upload Art"}
             </Button>
           </label>
           {errors.file && (
@@ -236,37 +348,7 @@ const Form = ({
             </Typography>
           )}
         
-          {!imgSrc && (
-            <React.Fragment>
-              <Typography variant="h6" className={classes.uploadTitle}>
-               (optional - shown only where supported)
-              </Typography>
-              <Typography variant="h6" className={classes.uploadTitle}>
-                Upload animated cover art / preview 
-              </Typography>
-              <Typography variant="h6" className={classes.uploadTitle2}>
-                GIF, MP4, MOV or HTML videos accepted. 10MB limit. Square ratio.
-              </Typography>
-            </React.Fragment>
-          )}
-          <input
-            accept="audio/*, video/*, image/*, .html, .pdf"
-            id="upload-file"
-            onChange={handleFile}
-            type="file"
-            hidden
-          />
           
-          <label htmlFor="upload-file">
-            <Button component="span" className={classes.uploadBtn}>
-              {file ? file.name : "Upload Animated Art"}
-            </Button>
-          </label>
-          {errors.file && (
-            <Typography variant="h6" className={classes.errUpload}>
-              {errors.file}
-            </Typography>
-          )}
         </div>
         <Typography variant="h6" className={classes.headerMain}>
                 Track Details
@@ -275,11 +357,6 @@ const Form = ({
         <div  className={classes.headerMain}>
         <select className={classes.formGroupInput}>
             <option value="Default">Select Album Type: (Default Basic Single)</option>
-            <option value="Psy">Basic Single (1 Track)</option>
-            <option value="Psy">Single (1 Track + Mixes/Edits/Remixes)</option>
-            <option value="Funk">EP  (3-7 Tracks)</option>
-            <option value="Reggae">LP  (7-10 Tracks)</option>
-            <option value="House">Album (10+ Tracks)</option>
           </select>
           </div>
 
@@ -292,10 +369,10 @@ const Form = ({
         {(
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-                 TRACK #1: Upload Music File
+                 TRACK #1: Upload Music File *
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-                MP3, WAV, AIFF audio files accepted. 100MB limit.
+                MP3, WAV, AIFF audio files accepted. 10MB limit.
               </Typography>
             </React.Fragment>
           )}
@@ -307,9 +384,9 @@ const Form = ({
             type="file"
             hidden
           />
-          <label htmlFor="upload-file-1">
+          <label htmlFor="upload-file-2">
             <Button component="span" className={classes.uploadBtn}>
-              {musicFile ? musicFile.name : "Track Details"}
+              {"Track Details"}
             </Button>
           </label>
           <label htmlFor="upload-file-1">
@@ -327,19 +404,8 @@ const Form = ({
   
         {/* Bonus content */}
         <Typography variant="h6"className={classes.headerMain}>
-                Bonus Content (optional)
+                Bonus Content
         </Typography>
-
-        <div  className={classes.headerMain}>
-        <select className={classes.formGroupInput}>
-            <option value="Default">Select Number of Bonus Content Files (Default 0)</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          </div>
 
          <div className={classes.musicupload}>
             
@@ -347,51 +413,30 @@ const Form = ({
         {(
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-                 Upload Bonus Content #1
+                 (optional) Upload Bonus Content #1
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-               JPG, PNG, TIFF, EPS, MP4, MP3, WAV, AIFF, PDF accepted. 100MB limit.
+               JPG, PNG, TIFF, EPS, MP4, MP3, WAV, AIFF, PDF accepted. 10MB limit.
               </Typography>
             </React.Fragment>
           )}
 
           <input
-            accept="audio/*"
-            id="upload-file-1"
-            onChange={handleMusicFile2}
+            accept="audio/*, video/*, image/*, .html, .pdf"
+            id="upload-bonus"
+            onChange={handleBonusFile}
             type="file"
             hidden
           />
-                <div className={classes.formTitleHalf}>
-          <label htmlFor="upload-file-2">
-          <label className={classes.formTitleLabel}>
-            Content Description
-          </label>
-          <textarea
-            type="text"
-            style={{
-              border: errors.desc ? "1px solid tomato" : "1px solid black",
-            }}
-            className={classes.formGroupInputDesc}
-            value={description}
-            placeholder="A description about your Bonus Content"
-            onChange={(e) => {
-              setErrors((pS) => ({ ...pS, desc: "" }));
-              setErr("");
-              setDescription(e.target.value);
-            }}
-            onBlur={validateDescription}
-            required
-          ></textarea>
-          </label></div>
-          <label htmlFor="upload-file-1">
+               
+          <label htmlFor="upload-bonus">
             <Button component="span" className={classes.uploadBtn}>
-              {musicFile ? musicFile.name : "Upload Bonus Content"}
+              {bonusFile ? bonusFile.name : "Upload Bonus Content"}
             </Button>
           </label>
-          {errors.musicFile && (
+          {errors.bonusFile && (
             <Typography variant="h6" className={classes.errUpload}>
-              {errors.musicFile}
+              {errors.bonusFile}
             </Typography>
           )}
         </div>
@@ -408,7 +453,7 @@ const Form = ({
     
 
       <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>Artist Name</label>
+          <label className={classes.formTitleLabel}>Artist Name *</label>
           <input
             type="text"
             style={{
@@ -418,7 +463,7 @@ const Form = ({
             className={classes.formGroupInput}
             value={name}
             onChange={(e) => {
-              setName(e.target.value);
+              setAName(e.target.value);
               setErr("");
               setErrors((pS) => ({ ...pS, name: "" }));
             }}
@@ -427,6 +472,7 @@ const Form = ({
           />
           {errors.name && <p className={classes.error}>{errors.name}</p>}
         </div>
+
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
             Artist URL
@@ -435,34 +481,36 @@ const Form = ({
             type="url"
             placeholder="http://www.bohemianyc.com"
             className={classes.formGroupInput}
-            value={url}
+            value={aurl}
             pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            onChange={(e) => setAurl(e.target.value)}
           />
         </div>
         </div>
+
         <div className={classes.formTitle}>
-          <label className={classes.formTitleLabel}>Album Title</label>
+          <label className={classes.formTitleLabel}>Album Title *</label>
           <input
             type="text"
             style={{
-              border: errors.name ? "1px solid tomato" : "1px solid black",
+              border: errors.title ? "1px solid tomato" : "1px solid black",
             }}
             placeholder="When Doves Fly"
             className={classes.formGroupInput}
-            value={name}
+            value={title}
             onChange={(e) => {
-              setName(e.target.value);
+              setTitle(e.target.value);
               setErr("");
-              setErrors((pS) => ({ ...pS, name: "" }));
+              setErrors((pS) => ({ ...pS, title: "" }));
             }}
-            onBlur={validateName}
+            onBlur={validateTitle}
             required
           />
-          {errors.name && <p className={classes.error}>{errors.name}</p>}
+          {errors.title && <p className={classes.error}>{errors.title}</p>}
         </div>
+
         <div className={classes.formTitle}>
-          <label className={classes.formTitleLabel}>Album Description</label>
+          <label className={classes.formTitleLabel}>Album Description *</label>
           <textarea
             type="text"
             style={{
@@ -472,7 +520,7 @@ const Form = ({
             value={description}
             placeholder="A description about your MAToken Album"
             onChange={(e) => {
-              setErrors((pS) => ({ ...pS, desc: "" }));
+              setDescription((pS) => ({ ...pS, desc: "" }));
               setErr("");
               setDescription(e.target.value);
             }}
@@ -490,15 +538,13 @@ const Form = ({
               border: "1px solid black",
             }}
             className={classes.formGroupInputDesc}
-            value={description}
+            value={credits}
             placeholder="Vocals, Bass, Drums, Strings, Producer, Engineer, Recorded By, Songwriter"
             onChange={(e) => {
-              setErrors((pS) => ({ ...pS, desc: "" }));
+              setErrors((pS) => ({ ...pS, credits: "" }));
               setErr("");
-              setDescription(e.target.value);
+              setCredits(e.target.value);
             }}
-            onBlur={validateDescription}
-            required
           ></textarea>
         </div>
 
@@ -510,99 +556,86 @@ const Form = ({
               border: "1px solid black",
             }}ds
             className={classes.formGroupInputDesc}
-            value={description}
+            value={companyCredits}
             placeholder="Published By, Recorded At, Distributed by, Copyright Info"
             onChange={(e) => {
-              setErrors((pS) => ({ ...pS, desc: "" }));
+              setErrors((pS) => ({ ...pS, companyCredits: "" }));
               setErr("");
-              setDescription(e.target.value);
+              setCompanyCredits(e.target.value);
             }}
-            onBlur={validateDescription}
-            required
           ></textarea>
         </div>
 
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Album Web / Discogs URL
+            Genre *
           </label>
-          <input
-            type="url"
-            placeholder="https://mylabelsite.com/example"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
 
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Release Date
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Current Date/Time</option>
-            <option value="Past">Past Release</option>
-            <option value="Future">Future Release (N/A coming soon)</option>
+          <select className={classes.formGroupInput} 
+          onChange={(e) => {
+              setErrors((pS) => ({ ...pS, genre: "" }));
+              setErr("");
+              setGenre(e.target.value);
+            }}>
+            <option value="">Select Genre:</option>
+            <option value="1">Pop</option>
+            <option value="2">Rock</option>
+            <option value="3">Metal / Heavy</option>
+            <option value="4">Electronic</option>
+            <option value="5">Underground Electronic</option>
+            <option value="6">Chillout/Ambient</option>
+            <option value="7">HipHop/Rap</option>
+            <option value="8">Funk / Disco</option>
+            <option value="9">R + B / Soul</option>
+            <option value="10">Reggae</option>
+            <option value="11">Latin</option>
+            <option value="12">Country</option>
+            <option value="13">Classical</option>
+            <option value="14">Folk/Regional</option>
+            <option value="15">Jazz</option>
+            <option value="16">Faith / Religous Music</option>
+            <option value="17">Acoustic / Instrumental</option>
+            <option value="18">Experimental</option>
+            <option value="19">Spoken Word / Vocal Only</option>
+            <option value="20">Samples / Sounds / Utility</option>
+            <option value="999">Custom</option>
           </select>
           
-          <input
-            type="url"
-            placeholder="02-03-2018"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Genre
-          </label>
-
-          <select className={classes.formGroupInput}>
-            <option value="Default">Select Genre:</option>
-            <option value="Rock">Rock</option>
-            <option value="Electronic">Electronic</option>
-            <option value="HipHop">HipHop</option>
-            <option value="Custom">Custom</option>
-          </select>
-          
-          <input
-            type="url"
-            placeholder="Enter Custom Genre"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
         </div>
 
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
             Sub Genre
           </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Select Sub Genre:</option>
-            <option value="Psy">Psychadellic</option>
-            <option value="Funk">Funk</option>
-            <option value="Reggae">Reggae</option>
-            <option value="House">House Music</option>
-            <option value="Custom">Custom</option>
+          <select className={classes.formGroupInput}
+            onChange={(e) => {
+              setErrors((pS) => ({ ...pS, subgenre: "" }));
+              setErr("");
+              setSubGenre(e.target.value);
+            }}>
+            <option value="">Select Sub Genre: (Default None)</option>
+            <option value="1">dance pop</option>
+            <option value="2">pop rap</option>
+            <option value="3">Reggae</option>
+            <option value="4">southern hip hop</option>
+            <option value="5">alternative rock</option>
+            <option value="6">alternative metal</option>
+            <option value="7">classic rock</option>
+            <option value="8">psychadellic rock</option>
+            <option value="9">latin pop</option>
+            <option value="10">techno</option>
+            <option value="11">trance</option>
+            <option value="12">electro house</option>
+            <option value="13">progressive house</option>
+            <option value="14">deep house</option>
+            <option value="15">synthpop</option>
+            <option value="16">reggaeton flow</option>
+            <option value="17">lo-fi</option>
+            <option value="18">christian rock</option>
+            <option value="99999">custom</option>
           </select>
           
-          <input
-            type="url"
-            placeholder="Enter Custom Sub Genre"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
         </div>
         </div>
 
@@ -612,12 +645,11 @@ const Form = ({
             Catalog Number
           </label>
           <input
-            type="url"
+            type="text"
             placeholder="BYC002"
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={catalogNum}
+            onChange={(e) => setCatalogNum(e.target.value)}
           />
         </div>
 
@@ -626,134 +658,14 @@ const Form = ({
             UPC/EAN
           </label>
           <input
-            type="url"
+            type="text"
             placeholder="721762628393"
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={upcean}
+            onChange={(e) => setUPCEAN(e.target.value)}
           />
         </div>
         </div>
-
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label Name
-          </label>
-          <input
-            type="url"
-            placeholder="Bohemian Yacht Club Music"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label URL
-          </label>
-          <input
-            type="url"
-            placeholder="http://www.bohemianyc.com"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-           Language
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">No Lyrics (Default)</option>
-            <option value="English">English</option>
-            <option value="French">French</option>
-            <option value="Spanish">Spanish</option>
-            <option value="Italian">Italian</option>
-            <option value="Portuguese">Portuguese</option>
-            <option value="German">German</option>
-            <option value="Dutch">Dutch</option>
-            <option value="Swedish">Swedish</option>
-            <option value="Polish">Polish</option>
-            <option value="Swedish">Greek</option>
-            <option value="Hindi">Hindi</option>
-            <option value="Bengali">Bengali</option>
-            <option value="Punjabi">Punjabi</option>
-            <option value="Hebrew">Hebrew</option>
-            <option value="Arabic">Arabic</option>
-            <option value="Turkish">Turkish</option>
-            <option value="Rusian">Russian</option>
-            <option value="Japanese">Japanese</option>
-            <option value="Chinese">Chinese (Manderin)</option>
-            <option value="Cantonese">Cantonese</option>
-            <option value="Korean">Korean</option>
-            <option value="Thai">Thai</option>
-            <option value="Vietnamese">Vietnamese</option>
-            <option value="Indonesian">Indonesian</option>
-            <option value="Swahili">Swahili</option>
-            <option value="Custom">Custom</option>
-          </select>
-          <input
-            type="url"
-            placeholder="English"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Content Rating
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Choose Content Rating</option>
-            <option value="C">C - Child Orientated Content</option>
-            <option value="G">G - Suitable for All Ages</option>
-            <option value="AA">AA - Recommended for 14+</option>
-            <option value="PA">PA - Parental Advisory</option>
-            <option value="X">X - Adults Only</option>
-          </select>
-          
-        </div>
-        </div>
-{/*}
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-           Release Region
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="WW">WW - Worldwide (Default)</option>
-            <option value="NA">NA - North America</option>
-          </select>
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Content Rating
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Choose Content Rating</option>
-            <option value="C">C - Child Orientated Content</option>
-            <option value="G">G - Suitable for All Ages</option>
-            <option value="AA">AA - Recommended for 14+</option>
-            <option value="PA">PA - Parental Advisory</option>
-            <option value="X">X - Adults Only</option>
-          </select>
-          
-        </div>
-        </div> */}
         
         <Typography variant="h6" className={classes.headerMain}>
                 Economic Details
@@ -762,88 +674,61 @@ const Form = ({
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Initial Sale Price
+            Initial Sale Price *
           </label>
           <input
-            type="url"
+            type='text'
             placeholder="$5"
+            style={{
+              border: errors.initialPrice ? "1px solid tomato" : "1px solid black",
+            }}
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={initialPrice}
+            onChange={(e) => setInitialPrice(e.target.value)}
+            onBlur={validateInitialPrice}
+            required
           />
+          {errors.initialPrice && <p className={classes.error}>{errors.initialPrice}</p>}
         </div>
 
         <div className={classes.halfContainer}>
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Initial Copies
+            Initial Copies *
           </label>
           <input
-            type="url"
+            type='text'
             placeholder="1000"
+            style={{
+              border: errors.initialCopies ? "1px solid tomato" : "1px solid black",
+            }}
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={initialCopies}
+            onChange={(e) => setInitialCopies(e.target.value)}
+            onBlur={validateInitialCopies}
+            required
           />
-        </div>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            On Hold in Pool
-          </label>
-          <input
-            type="url"
-            placeholder="1000"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-        </div>
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Initial Sale End Date Action
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Select: (Default Add to Pool)</option>
-            <option value="Funk">Add Remaining Initial Copies to Pool + Enable Trading (Default Recommended)</option>
-            <option value="Psy">Burn Remaining Initial Copies + Enable Trading</option>
-            <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Enable Trading</option>
-            <option value="Reggae">Continue Selling at Inital Price Until Sold Out + then Disable Trading</option>
-            <option value="Reggae">Stop Sale + Disable Trading</option>
-          </select>
+          {errors.initialCopies && <p className={classes.error}>{errors.initialCopies}</p>}
         </div>
 
         <div className={classes.formTitleHalf}>
           <label className={classes.formTitleLabel}>
-            Initial Sale End Date
+            On Hold in Pool *
           </label>
-          <select className={classes.formGroupInput}>
-            <option value="2">Default 2 Months</option>
-            <option value=".5">Two Weeks</option>
-            <option value="1">One Month</option>
-            <option value="2">Two Months</option>
-            <option value="3">Three Months</option>
-            <option value="4">Four Months</option>
-            <option value="5">Five Months</option>
-            <option value="6">Six Months</option>
-            <option value="12">One Year</option>
-            <option value="Future">Set Custom Date</option>
-          </select>
-          
           <input
-            type="url"
-            placeholder="02-03-2018"
+            type='text'
+            placeholder="1000"
+            style={{
+              border: errors.onHoldPool ? "1px solid tomato" : "1px solid black",
+            }}
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={onHoldPool}
+            onChange={(e) => setOnHoldPool(e.target.value)}
+            onBlur={validateOnHoldPool}
+            required
           />
+          {errors.onHoldPool && <p className={classes.error}>{errors.onHoldPool}</p>}
+        </div>
         </div>
         </div>
 
@@ -853,12 +738,11 @@ const Form = ({
             Max Copies per Customer
           </label>
           <input
-            type="url"
+             type='text'
             placeholder="5"
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={maxCopiesCustomer}
+            onChange={(e) => setMaxCopiesCustomer(e.target.value)}
           />
         </div>
 
@@ -867,12 +751,11 @@ const Form = ({
             Max Copies per Reseller
           </label>
           <input
-            type="url"
+            type="text"
             placeholder="100"
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={maxCopiesReseller}
+            onChange={(e) => setMaxCopiesReseller(e.target.value)}
           />
         </div>
         </div>
@@ -883,12 +766,6 @@ const Form = ({
           <select className={classes.formGroupInput}>
             <option value="Default">Select Payout Parties: (Default Artist Only)</option>
             <option value="Psy">Artist Only</option>
-            <option value="Funk">Label Only</option>
-            <option value="Reggae">Artist + Label</option>
-            <option value="House">Artist, Label + Third Party</option>
-            <option value="Custom">Artist + Third Party</option>
-            <option value="Custom">Label + Third Party</option>
-            <option value="Custom">Third Party</option>
           </select>
 
         <div className={classes.halfContainer}>
@@ -897,12 +774,11 @@ const Form = ({
             Artist Payout Percentage
           </label>
           <input
-            type="url"
-            placeholder="40%"
+            type="text"
+            placeholder="100%"
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={payoutAPercent}
+            onChange={(e) => setAPercent(e.target.value)}
           />
         </div>
 
@@ -911,42 +787,11 @@ const Form = ({
             Artist Payout Address
           </label>
           <input
-            type="url"
-            placeholder="0xe3rw..."
+            type="text"
+            placeholder="eth address 0xe3rw..."
             className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-        </div>
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label Payout Percentage
-          </label>
-          <input
-            type="url"
-            placeholder="60%"
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Label Payout Address
-          </label>
-          <input
-            type="url"
-            placeholder="0xe3rw..."
-            className={classes.formGroupInput}
-            value={url}
-            pattern="https?://.+"
-            onChange={(e) => setSurl(e.target.value)}
+            value={payoutAAddress}
+            onChange={(e) => setAAddress(e.target.value)}
           />
         </div>
         </div>
