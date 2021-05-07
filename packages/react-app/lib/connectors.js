@@ -1,33 +1,31 @@
-import { InjectedConnector } from "@web3-react/injected-connector";
-import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { WalletLinkConnector } from "@web3-react/walletlink-connector";
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { MetaMaskWalletProvider } from 'etherspot';
+import WalletConnect from '@walletconnect/client';
+import QRCodeModal from '@walletconnect/qrcode-modal';
+
 
 import { getLocal, removeLocal, setLocal } from "./local";
 
 export const CACHED_CONNECTOR_KEY = "WEB3_REACT_CACHED_CONNECTOR";
 
 export const injected = new InjectedConnector({
-  // TODO: Add support for matic
-  supportedChainIds: [137, 80001 ],
+  // TODO: Add support for mainnet
+  supportedChainIds: [137, 80001],
 });
 
 export const walletConnect = new WalletConnectConnector({
   rpc: {
-    //1: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`,
     137: 'https://rpc-mainnet.maticvigil.com',
-    80001: 'https://rpc-mumbai.maticvigil.com',
+    80001: 'RPC	https://rpc-mumbai.maticvigil.com',
   },
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,
   pollingInterval: 15000,
 });
 
-export const walletLink = new WalletLinkConnector({
-  // Mainnet only
-  url: 'https://rpc-mainnet.maticvigil.com',
-  appName: "MAToken Mint",
-  appLogoUrl: "",
-});
+export const torusConnect = new TorusConnector({ chainId: 80001 });
 
 export const getConnectorName = (connector) => {
   if (connector instanceof InjectedConnector) {
@@ -36,8 +34,8 @@ export const getConnectorName = (connector) => {
   if (connector instanceof WalletConnectConnector) {
     return "wallet-connect";
   }
-  if (connector instanceof WalletLinkConnector) {
-    return "wallet-link";
+  if (connector instanceof TorusConnector) {
+    return "torus-connect";
   }
   return "";
 };
@@ -50,8 +48,8 @@ const getConnector = (name) => {
       return injectedMobile;
     case "wallet-connect":
       return walletConnect;
-    case "wallet-link":
-      return walletLink;
+    case "torus-connect":
+      return torusConnect;
     default:
       return null;
   }
@@ -76,7 +74,6 @@ export const activateConnector = (
   onError = () => {}
 ) => {
   const { activate } = web3ReactContext;
-
   setLocal(CACHED_CONNECTOR_KEY, getConnectorName(connector));
   activate(connector, undefined, true).catch(onError);
 };
@@ -103,8 +100,10 @@ export default [
     connector: walletConnect,
   },
   {
-    name: "wallet-link",
-    displayName: "Torus",
-    connector: walletLink,
+    name: "torus",
+    displayName: "torus",
+    connector: torusConnect,
   },
 ];
+
+

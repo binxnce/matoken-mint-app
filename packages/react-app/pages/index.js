@@ -106,6 +106,19 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       padding: 10,
     },
+    close: {
+      cursor: "pointer",
+      position: "absolute",
+      display: "block",
+      padding: "2px 5px",
+      lineheight: "20px",
+      right: "10px",
+      top: "10px",
+      fontsize: "24px",
+      background: "#ffffff",
+      borderradius: "18px",
+      border: "1px solid #cfcece",
+    },
   },
 }));
 
