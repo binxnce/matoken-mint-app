@@ -27,7 +27,7 @@ const AppNav = () => {
   return (
     <Bar variant="light" expand="sm" collapseOnSelect>
       <Link href="/" passHref>
-        <Logo>MemeSwap</Logo>
+        <Logo>matokenswap</Logo>
       </Link>
       <Link href="/about" passHref>
         About / FAQ

@@ -6,7 +6,7 @@ import CreatedMemes from '../../components/CreatedMemes';
 const ProfileCreatedMemes = () => (
   <>
     <Head>
-      <title>Created memes - MemeSwap</title>
+      <title>Created memes - matokenswap</title>
     </Head>
     <ProfileSubpage ContentComponent={CreatedMemes} />
   </>

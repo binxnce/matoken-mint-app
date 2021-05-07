@@ -30,7 +30,7 @@ const IntroModal = (props) => {
   return (
     <Modal {...props}>
       <Wrapper>
-        <ModalTitle>Welcome to MemeSwap</ModalTitle>
+        <ModalTitle>Welcome to matokenswap</ModalTitle>
 
         {/* intro image */}
         {/* <img src="" alt="" /> */}

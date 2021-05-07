@@ -41,14 +41,14 @@ const About = () => {
           <h3>About</h3>
           <hr />
           <p>
-            Memeswap is a marketplace for digital art. It&apos;s designed to be inclusive and mindful of{' '}
-            <i>shared ownership</i>. Memeswap allows an artist to sell his artwork to a collective of owners, empowering
+            matokenswap is a marketplace for digital art. It&apos;s designed to be inclusive and mindful of{' '}
+            <i>shared ownership</i>. matokenswap allows an artist to sell his artwork to a collective of owners, empowering
             the community and fans to own a shard of the artwork.
           </p>
           <br />
           <p>
             Have ideas or suggestions? Reach us at{' '}
-            <a href="mailto:memeswap@pillarproject.io">memeswap@pillarproject.io</a>
+            <a href="mailto:matokenswap@pillarproject.io">matokenswap@pillarproject.io</a>
           </p>
           <p>
             <br />
@@ -74,7 +74,7 @@ const About = () => {
                 <br />
                 <p>
                   In order to start swapping memes, you’ll need to have DAI or xDai in your crypto wallet. xDai is a
-                  native cryptocurrency of the network that MemeSwap lives on. Learn more about it{' '}
+                  native cryptocurrency of the network that matokenswap lives on. Learn more about it{' '}
                   <a
                     href="https://jaredstauffer.medium.com/what-is-xdai-how-do-i-use-xdai-a-simple-explanation-7440cbaf1df6"
                     target="_blank"
@@ -90,7 +90,7 @@ const About = () => {
               <Question>How to top up my Dank balance?</Question>
               <Answer>
                 <p>
-                  Go to <a href="/">MemeSwap’s main page</a>, click on the address that shows up next to your $ balance
+                  Go to <a href="/">matokenswap’s main page</a>, click on the address that shows up next to your $ balance
                   in the top right corner. In the pop up you’ll see 2 top-up options.
                 </p>
                 <br />
@@ -141,7 +141,7 @@ const About = () => {
             <li>
               <Question>How much $$$ do I need?</Question>
               <Answer>
-                As much as you want to buy and sell memes for. The minimum top-up via the bridge is 0.005 DAI, but
+                As much as you want to buy and sellmusic albumsfor. The minimum top-up via the bridge is 0.005 DAI, but
                 depending on how much DAI/xDai you’ll have on your Dank balance, that amount can become the maximum
                 total value of the meme you’re putting for sale.
               </Answer>
@@ -181,7 +181,7 @@ const About = () => {
                 </p>
                 <p>
                   1. In the newly created meme, click on the <b>Manage liquidity</b> button. Here&apos;s where you{' '}
-                  determine how many shards will be available for sale on Memeswap.
+                  determine how many shards will be available for sale on matokenswap.
                 </p>
                 <p>
                   2. In the <b>Add</b> section, set this meme&apos;s total value and choose how many shards you want to

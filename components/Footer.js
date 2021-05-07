@@ -54,7 +54,7 @@ const Footer = ({ className = '' }) => (
     <Container>
       <Nav>
         <NavItem className="ml-auto">
-          <LegalTag>2021 © MemeSwap</LegalTag>
+          <LegalTag>2021 © matokenswap</LegalTag>
         </NavItem>
       </Nav>
     </Container>

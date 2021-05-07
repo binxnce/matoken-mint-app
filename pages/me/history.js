@@ -6,7 +6,7 @@ import History from '../../components/History';
 const ProfileHistory = () => (
   <>
     <Head>
-      <title>History - MemeSwap</title>
+      <title>History - matokenswap</title>
     </Head>
     <ProfileSubpage ContentComponent={History} />
   </>

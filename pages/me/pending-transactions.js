@@ -6,7 +6,7 @@ import PendingTransactions from '../../components/PendingTransactions';
 const ProfilePendingTransactions = () => (
   <>
     <Head>
-      <title>Transactions - MemeSwap</title>
+      <title>Transactions - matokenswap</title>
     </Head>
     <ProfileSubpage ContentComponent={PendingTransactions} />
   </>

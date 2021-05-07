@@ -1,9 +1,9 @@
 import { EnvNames } from 'etherspot';
 
 const config = {
-  webUrl: 'https://memeswap.pillarproject.io',
-  apiUrl: 'https://memeswap.pillarproject.io/api',
-  socketsServerUrl: 'https://memeswap.pillarproject.io',
+  webUrl: 'https://matokenswap.pillarproject.io',
+  apiUrl: 'https://matokenswap.pillarproject.io/api',
+  socketsServerUrl: 'https://matokenswap.pillarproject.io',
   storageUrl: 'https://d1dogjlgz8ks8z.cloudfront.net',
   categories: ['funny', 'gif', 'animals', 'savage', 'gaming'],
   chainId: 100,

@@ -10,7 +10,7 @@ const Me = () => {
 
   return (
     <Head>
-      <title>Profile - MemeSwap</title>
+      <title>Profile - matokenswap</title>
     </Head>
   );
 };
