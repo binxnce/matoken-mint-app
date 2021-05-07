@@ -9,19 +9,44 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 toast.configure();
 
-import connectors, { activateConnector } from "../lib/connectors";
+import 
+  connectors, { 
+  activateConnector, 
+  getConnectorName,
+  } from "../lib/connectors";
+
+import {
+  loginTorus,
+  loginWalletConnect,
+  loginMetamask, 
+  } from "../lib/login";
 
 const ConnectWallet = ({ buttonClassName }) => {
   const web3ReactContext = useWeb3React();
 
+  const hideLoginModal = props.onHide ?? noop;
+
   const onActivate = (connector) => {
-    console.log(connector);
+    const connectorName = getConnectorName(connector);
+    console.log('Connector is ', connectorName);
     activateConnector(connector, web3ReactContext, (error) => {
       if (error instanceof UnsupportedChainIdError) {
         toast("Incorrect network", { type: "error" });
       }
       if (error instanceof NoEthereumProviderError) {
         toast("No wallet detected", { type: "error" });
+      }
+      switch(connector) {
+        case 'metamask': 
+          loginMetmask();
+          break;
+        case 'wallet-connect':
+          loginWalletConnect();
+          break;
+        case 'torus-connect':
+          loginTorus();
+          break;
+        default: console.log('Connector in switch', connector);
       }
     });
   };

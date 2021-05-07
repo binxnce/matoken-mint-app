@@ -1,6 +1,10 @@
-import { InjectedConnector } from "@web3-react/injected-connector";
-import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { TorusConnector } from "@web3-react/torus-connector";
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { MetaMaskWalletProvider } from 'etherspot';
+import WalletConnect from '@walletconnect/client';
+import QRCodeModal from '@walletconnect/qrcode-modal';
+
 
 import { getLocal, removeLocal, setLocal } from "./local";
 
@@ -8,20 +12,20 @@ export const CACHED_CONNECTOR_KEY = "WEB3_REACT_CACHED_CONNECTOR";
 
 export const injected = new InjectedConnector({
   // TODO: Add support for mainnet
-  supportedChainIds: [1, 5, 1337],
+  supportedChainIds: [137, 80001],
 });
 
 export const walletConnect = new WalletConnectConnector({
   rpc: {
-    // Mainnet only
-    1: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`,
+    137: 'https://rpc-mainnet.maticvigil.com',
+    80001: 'RPC	https://rpc-mumbai.maticvigil.com',
   },
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,
   pollingInterval: 15000,
 });
 
-export const torusConnect = new TorusConnector({ chainId: 1 });
+export const torusConnect = new TorusConnector({ chainId: 80001 });
 
 export const getConnectorName = (connector) => {
   if (connector instanceof InjectedConnector) {
@@ -70,7 +74,6 @@ export const activateConnector = (
   onError = () => {}
 ) => {
   const { activate } = web3ReactContext;
-
   setLocal(CACHED_CONNECTOR_KEY, getConnectorName(connector));
   activate(connector, undefined, true).catch(onError);
 };
@@ -103,3 +106,5 @@ export default [
   },
 
 ];
+
+
