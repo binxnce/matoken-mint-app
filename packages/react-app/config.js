@@ -1,7 +1,7 @@
 const contracts = require('@matoken/contracts');
 module.exports = (config) => ({
   // web3
-  ethProvider: 'http://127.0.0.1:8545',//Mumbai as the default
+  ethProvider: process.env.ETH_PROVIDER,//Mumbai as the default
   chainId: 80001,
   web3Addresses: {
     dispenser: contracts.ERC1155.address, //TODO
@@ -13,8 +13,8 @@ module.exports = (config) => ({
   mainToken: null, // null for the main network currency (ETH)
 
   etherspot: {
-    projectAddress: '',
-    projectPrivateKey: '',
+    projectAddress: process.env.PROJECT_ADDRESS,
+    projectPrivateKey: process.env.PROJECT_PRIVATE_KEY,
     networkName: 'localA',
     env: EnvNames.LocalNets,
   },

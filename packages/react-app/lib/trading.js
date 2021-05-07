@@ -2,20 +2,20 @@ const { ethers, providers } = require('ethers');
 const BigNumber = require('bignumber.js');
 const abiCoder = require('web3-eth-abi');
 const moment = require('moment');
-const config = require('@matoken/contracts');
+const contracts = require('@matoken/contracts');
+const config = require('../config');
 const { calculateShardsBuyPrice, calculateShardsSellPrice, calculateAvailableShards, toWei } = require('./utils');
-const provider = process.env.PROVIDER_URL;
 
 const ABI = {
-  erc20: config.getContractAbi(config.ContractNames.ERC20),
-  erc1155: config.getContractAbi(config.ContractNames.ERC1155),
-  erc721: config.getContractAbi(config.ContractNames.ERC721),
-  factory: config.getContractAbi(config.ContractNames.UniswapV2Factory),
-  router: config.getContractAbi(config.ContractNames.UniswapV2Router),
-  pair: config.getContractAbi(config.ContractNames.UniswapV2Pair),
+  erc20: contracts.getContractAbi(contracts.ContractNames.ERC20),
+  erc1155: contracts.getContractAbi(contracts.ContractNames.ERC1155),
+  erc721: contracts.getContractAbi(contracts.ContractNames.ERC721),
+  factory: contracts.getContractAbi(contracts.ContractNames.UniswapV2Factory),
+  router: contracts.getContractAbi(contracts.ContractNames.UniswapV2Router),
+  pair: contracts.getContractAbi(contracts.ContractNames.UniswapV2Pair),
 };
 
-const ethProvider = new providers.JsonRpcProvider(provider);
+const ethProvider = new providers.JsonRpcProvider(config.ETH_PROVIDER);
 
 const transactionParams = {
   gasPrice: '0xa',
