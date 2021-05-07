@@ -504,6 +504,111 @@ async function getMemeNextId() {
   return nextId;
 }
 
+// FUNCTIONS TO CREATE MEMES, ADD/REMOVE LIQUIDITY
+async function createMemeTransactions(userId, memeId, memeUniqueId, memeTokenHash, userAddress) {
+    const mintMemeParams = getMintMemeParams(userAddress, memeUniqueId);
+    const depositMemeParams = getDepositMemeParams(userAddress, memeUniqueId);
+  
+    const createPairParams = getCreatePairParams(memeTokenHash);
+  
+    const transactionQueue = [
+      {
+        params: mintMemeParams,
+        type: TRANSACTION_TYPE.MINT,
+      },
+      {
+        params: depositMemeParams,
+        type: TRANSACTION_TYPE.TRANSFER,
+      },
+      {
+        params: createPairParams,
+        type: TRANSACTION_TYPE.CREATE_PAIR,
+      },
+    ];
+
+    return transactionQueue;
+  }
+  
+  async function addLiquidityTransactions(
+    userId,
+    memeId,
+    memeTokenHash,
+    memeTokenDeposit,
+    ethDeposit,
+    memeTokenMinDeposit,
+    ethMinDeposit,
+    userAddress,
+  ) {
+    let addLiquidityParams;
+    const ethAsMainToken = !config.mainToken;
+  
+    if (ethAsMainToken) {
+      addLiquidityParams = getAddLiquidityETHParams(
+        memeTokenHash,
+        memeTokenDeposit,
+        ethDeposit,
+        memeTokenMinDeposit,
+        ethMinDeposit,
+        userAddress,
+      );
+    } else {
+      addLiquidityParams = getAddLiquidityTokenParams(
+        memeTokenHash,
+        memeTokenDeposit,
+        ethDeposit,
+        memeTokenMinDeposit,
+        ethMinDeposit,
+        userAddress,
+      );
+    }
+  
+    const mainTokenAllowance = [];
+    if (!ethAsMainToken) {
+      mainTokenAllowance.push({
+        spenderAddress: config.web3Addresses.router,
+        contractAddress: config.mainToken,
+        contractType: CONTRACT_TYPE.ERC20,
+      });
+    }
+  
+    const transactionQueue = [
+      {
+        params: addLiquidityParams,
+        type: TRANSACTION_TYPE.ADD_LIQUIDITY,
+        allowance: [
+          ...mainTokenAllowance,
+          {
+            spenderAddress: config.web3Addresses.router,
+            contractAddress: config.web3Addresses.dispenser,
+            contractType: CONTRACT_TYPE.ERC1155,
+          },
+        ],
+      },
+    ];
+  
+    return transactionQueue;
+  }
+  
+  async function removeLiquidityTransactions(userId, memeId, memeTokenHash, pairAddress, memeTokens, senderAddress) {
+    const returnETH = !config.mainToken;
+    const removeLiquidityParams = getRemoveLiquidityParams(memeTokenHash, memeTokens, senderAddress, returnETH);
+    const transactionQueue = [
+      {
+        params: removeLiquidityParams,
+        type: TRANSACTION_TYPE.REMOVE_LIQUIDITY,
+        allowance: [
+          {
+            spenderAddress: config.web3Addresses.router,
+            contractAddress: pairAddress,
+            contractType: CONTRACT_TYPE.PAIR,
+          },
+        ],
+      },
+    ];
+  
+    return transactionQueue;
+  }
+
 module.exports = {
   ZERO_ADDRESS: `0x${'0'.repeat(40)}`,
   validateJson,
@@ -554,4 +659,7 @@ module.exports = {
   getPairAllowance,
   getOwnerPairNonce,
   quoteAddressLiquidity,
+  createMemeTransactions,
+  addLiquidityTransactions,
+  removeLiquidityTransactions,
 };
