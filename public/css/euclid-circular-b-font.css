@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'EuclidCircularB';
+    src: url('../webfonts/EuclidCircularB-Regular-WebS.eot');
+    src: url('../webfonts/EuclidCircularB-Regular-WebS.eot?#iefix') format('embedded-opentype'),
+         url('../webfonts/EuclidCircularB-Regular-WebS.woff2') format('woff2'),
+         url('../webfonts/EuclidCircularB-Regular-WebS.woff') format('woff'),
+         url('../webfonts/EuclidCircularB-Regular-WebS.ttf') format('truetype'),
+         url('../webfonts/EuclidCircularB-Regular-WebS.svg#Font') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'EuclidCircularB';
+    src: url('../webfonts/EuclidCircularB-Medium-WebS.eot');
+    src: url('../webfonts/EuclidCircularB-Medium-WebS.eot?#iefix') format('embedded-opentype'),
+         url('../webfonts/EuclidCircularB-Medium-WebS.woff2') format('woff2'),
+         url('../webfonts/EuclidCircularB-Medium-WebS.woff') format('woff'),
+         url('../webfonts/EuclidCircularB-Medium-WebS.ttf') format('truetype'),
+         url('../webfonts/EuclidCircularB-Medium-WebS.svg#Font') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'EuclidCircularB';
+    src: url('../webfonts/EuclidCircularB-Bold-WebS.eot');
+    src: url('../webfonts/EuclidCircularB-Bold-WebS.eot?#iefix') format('embedded-opentype'),
+         url('../webfonts/EuclidCircularB-Bold-WebS.woff2') format('woff2'),
+         url('../webfonts/EuclidCircularB-Bold-WebS.woff') format('woff'),
+         url('../webfonts/EuclidCircularB-Bold-WebS.ttf') format('truetype'),
+         url('../webfonts/EuclidCircularB-Bold-WebS.svg#Font') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}

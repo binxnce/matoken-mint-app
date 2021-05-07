@@ -1,0 +1,426 @@
+body {
+    font-family: 'EuclidCircularB', sans-serif;
+    font-weight: 500;
+}
+
+#nprogress {
+    pointer-events: none;
+}
+
+#nprogress .bar {
+    background: #29d;
+
+    position: fixed;
+    z-index: 1031;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+}
+
+/* Fancy blur effect */
+#nprogress .peg {
+    display: block;
+    position: absolute;
+    right: 0px;
+    width: 100px;
+    height: 100%;
+    box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+    opacity: 1.0;
+
+    -webkit-transform: rotate(3deg) translate(0px, -4px);
+        -ms-transform: rotate(3deg) translate(0px, -4px);
+            transform: rotate(3deg) translate(0px, -4px);
+}
+
+/* Remove these to get rid of the spinner */
+#nprogress .spinner {
+    display: block;
+    position: fixed;
+    z-index: 1031;
+    top: 15px;
+    right: 15px;
+}
+
+#nprogress .spinner-icon {
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+
+    border: solid 2px transparent;
+    border-top-color: #29d;
+    border-left-color: #29d;
+    border-radius: 50%;
+
+    -webkit-animation: nprogress-spinner 400ms linear infinite;
+            animation: nprogress-spinner 400ms linear infinite;
+}
+
+.nprogress-custom-parent {
+    overflow: hidden;
+    position: relative;
+}
+
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+    position: absolute;
+}
+
+@-webkit-keyframes nprogress-spinner {
+    0%   { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes nprogress-spinner {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.profile {
+    font-size: 32px;
+    color: #C1C1C1;
+    margin: 0;
+    padding: 0;
+    padding-top: 8px;
+}
+i.fa {
+    display: inline-block;
+    width: 16px;
+    height: 15px;
+    background-image: url(/images/icons.png);
+    opacity: .6;
+}
+i.fa-face-big {
+    width: 33px;
+    height: 33px;
+    opacity: .9;
+    background-position: 0 -15px;
+}
+table tr.sep {
+    border-top: solid #cacaca 1px;
+}
+td.profile {
+    vertical-align: baseline
+}
+.blue {
+    color: #128ee9;
+    font-size: 13px;
+}
+.vote {
+    margin-left: 5px;
+    font-size: 16px;
+    color: #999;
+}
+.vote:hover {
+    color: #333;
+}
+p {margin:0px;}
+td { padding-bottom: 5px;}
+i.fa-thumbs-up {
+    background-position: 0 0;
+}
+i.fa-thumbs-down {
+    background-position: -16px 0;
+}
+.smallRP {
+    border-bottom: solid #ddd 1px;
+}
+.pull-left {
+    float: left!important;
+}
+.tag-input {
+  border: none;
+  display: inline-block;
+  width: auto;
+}
+
+.form-control.tag-input:focus, .tab-input:focus, .tab-input:active, .tab-input:hover {
+  outline:0px !important;
+  -webkit-appearance:none;
+  box-shadow: none !important;
+}
+.ago {
+    padding-left: 8px;
+    color: #767676;
+    font-size: 11px;
+}
+.nav-avatar {
+  max-width: 40px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+.addMemeBtn {
+    position:fixed;
+    bottom: 60px;
+    right: 60px;
+    z-index: 10;
+}
+
+.addMemeBtn button {
+    border-radius: 54px;
+    height: 54px;
+    min-width: 54px;
+    background-color: #9c13bb!important;
+    border: none;
+    align-items: center;
+    display: flex;
+}
+.addMemeBtn button span{
+    display: none;
+    font-size: 14px;
+}
+
+.addMemeBtn button:hover {
+    background-color: #9c13bb;
+}
+
+.addMemeBtn button:hover span {
+    display: inline-block;
+}
+.leader {
+    border-top: solid #ccc 1px;
+    padding: 10px 0px;
+}
+.leader-avatar {
+    max-width: 48px;
+}
+.footer {
+    display: block;
+    font-size: 13px;
+    background-color: #323232;
+    padding: 15px 0;
+    line-height: 20px;
+    color: #fff;
+    height: 50px;
+}
+.fright { float: right!important; }
+.footer ul {
+    display: block;margin:0px; padding-left: 0;list-style: none;
+}
+.footer li {
+    display: inline-block;margin: 0 .5em;
+}
+.interest {
+    float:right;color:#444;font-weight:normal;font-size:60%
+}
+
+.emp-profile{
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+.profile-img{
+    text-align: center;
+}
+.profile-img img{
+    width: 70%;
+    height: 100%;
+}
+.profile-img .file {
+    position: relative;
+    overflow: hidden;
+    margin-top: -49%;
+    width: 70%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+}
+.profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+.profile-head h5{
+    color: #333;
+}
+.profile-head h6{
+    color: #0062cc;
+}
+.profile-edit-btn{
+    border: none;
+    border-radius: 1.5rem;
+    width: 70%;
+    padding: 2%;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+}
+.proile-rating{
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+}
+.proile-rating span{
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+}
+.profile-head .nav-tabs{
+    margin-bottom:5%;
+}
+.profile-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+}
+.profile-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #0062cc;
+}
+.profile-work{
+    padding: 14%;
+    margin-top: -15%;
+}
+.profile-work p{
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+}
+.profile-work a{
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+.profile-work ul{
+    list-style: none;
+}
+.profile-tab label{
+    font-weight: 600;
+}
+.profile-tab p{
+    font-weight: 600;
+    color: #0062cc;
+}
+.layoutSize {
+    max-width: 1100px;
+    margin: 40px auto;
+}
+.memeLink {color: #333}
+.videoPlay {
+    position: absolute;
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    top: 40px;
+    color: #fff;
+    left: 40px;
+    border: 1px #fff solid;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 5px 8px;
+}
+.videoPause {
+    position: absolute;
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    top: 40px;
+    color: #fff;
+    left: 40px;
+    border: 1px #fff solid;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 5px 7px;
+}
+.videoVolumeHigh {
+    position: absolute;
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    top: 40px;
+    color: #fff;
+    left: 75px;
+    border: 1px #fff solid;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 5px 6px;
+}
+.videoVolumeLow {
+    position: absolute;
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    top: 40px;
+    color: #fff;
+    left: 75px;
+    border: 1px #fff solid;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 5px 6px;
+}
+
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width:576px) {
+    .container {
+        max-width: 540px
+    }
+}
+
+@media (min-width:768px) {
+    .container {
+        max-width: 720px
+    }
+}
+
+@media (min-width:992px) {
+    .container {
+        max-width: 960px
+    }
+}
+
+@media (min-width:1200px) {
+    .container {
+        max-width: 960px
+    }
+}
+
+.modal-backdrop.show {
+    opacity: 1;
+}
+
+.modal-backdrop {
+    background-color: rgba(237, 237, 237, 0.95);
+}
+
+.noOwnedMemes p:nth-child(1) {
+    padding: 80px 0px;
+    font-size:20px;
+}
+.noOwnedMemes p:nth-child(2) {
+    font-weight: bold;
+    font-size: 14px;
+}
+.noOwnedMemes p:nth-child(3) {
+    font-size: 14px;
+}
+.noOwnedMemes p:nth-child(4) {
+    padding:30px;
+    font-size: 16px;
+}
+
+.nav-borderless .nav-item:first-child > .nav-link {
+    padding-left: 0;
+}
+
+.nav-borderless .nav-item:last-child > .nav-link {
+    padding-right: 0;
+}
+.blueLink {
+    color: #007bff!important;
+}
+.blueLink:hover {
+    color: #004a99!important;
+}
