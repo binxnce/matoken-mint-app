@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { MetaMaskWalletProvider } from 'etherspot';
 import WalletConnect from '@walletconnect/client';
-import QRCodeModal from '@walletconnect/qrcode-modal';
+import { InjectedConnector } from "@web3-react/injected-connector";
+import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
+import { TorusConnector } from "@web3-react/torus-connector";
 
 
 import { getLocal, removeLocal, setLocal } from "./local";
