@@ -14,11 +14,12 @@ export const CACHED_CONNECTOR_KEY = "WEB3_REACT_CACHED_CONNECTOR";
 
 export const injected = new InjectedConnector({
   // TODO: Add support for mainnet
-  supportedChainIds: [137, 80001],
+  supportedChainIds: [1, 137, 80001],
 });
 
 export const walletConnect = new WalletConnectConnector({
   rpc: {
+    1: `https://mainnet.infura.io/v3/${process.env.INFURA_TOKEN}`,
     137: 'https://rpc-mainnet.maticvigil.com',
     80001: 'RPC	https://rpc-mumbai.maticvigil.com',
   },

@@ -16,7 +16,6 @@ export const login = async (providerType, providerData) => {
     const { account } = sdkState;
     setSdkUser(account)(dispatch);
     setWalletProvider(walletProvider)(dispatch);
-    hideLoginModal();
   } catch (err) {
     await sdkService.killSession().catch((_) => _);
     alert(err.message);
@@ -92,7 +91,6 @@ export const subscribeToEvents = () => {
       .killSession()
       .catch(() => null)
       .finally(() => {
-        signOutUser()(dispatch);
         window.location.href = '/';
       });
   });
@@ -110,5 +108,4 @@ export const onSessionUpdate = async (accounts, chainId) => {
     return;
   }*/
   await login(SdkService.SUPPORTED_WALLET_PROVIDERS.WALLET_CONNECT, walletConnect);
-  hideLoginModal();
 };

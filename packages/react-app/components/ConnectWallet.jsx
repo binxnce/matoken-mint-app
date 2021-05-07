@@ -23,8 +23,6 @@ import {
 const ConnectWallet = ({ buttonClassName }) => {
   const web3ReactContext = useWeb3React();
 
-  const hideLoginModal = props.onHide ?? noop;
-
   const onActivate = (connector) => {
     const connectorName = getConnectorName(connector);
     console.log('Connector is ', connectorName);
