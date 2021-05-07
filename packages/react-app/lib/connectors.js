@@ -1,5 +1,6 @@
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
+import { TorusConnector } from "@web3-react/torus-connector";
 
 import { getLocal, removeLocal, setLocal } from "./local";
 
@@ -20,7 +21,7 @@ export const walletConnect = new WalletConnectConnector({
   pollingInterval: 15000,
 });
 
-export const torusConnect = "";
+export const torusConnect = new TorusConnector({ chainId: 1 });
 
 export const getConnectorName = (connector) => {
   if (connector instanceof InjectedConnector) {
@@ -28,6 +29,9 @@ export const getConnectorName = (connector) => {
   }
   if (connector instanceof WalletConnectConnector) {
     return "wallet-connect";
+  }
+  if (connector instanceof TorusConnector) {
+    return "torus-connect";
   }
   return "";
 };
@@ -40,7 +44,7 @@ const getConnector = (name) => {
       return injectedMobile;
     case "wallet-connect":
       return walletConnect;
-    case "torusConnect":
+    case "torus-connect":
       return torusConnect;
     default:
       return null;

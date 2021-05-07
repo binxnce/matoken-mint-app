@@ -3,8 +3,6 @@ import { NoEthereumProviderError } from "@web3-react/injected-connector";
 import React from "react";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import { toast } from "react-toastify";
@@ -38,12 +36,17 @@ const ConnectWallet = ({ buttonClassName }) => {
       position="right center"
       contentStyle={{
         width: "min-content",
-        padding: "10px",
+        padding: "30px",
         textAlign: "center",
+        borderRadius: "15px",
       }}
       modal
       nested
-    >
+    > 
+   
+      <span>
+        Connect your wallet using one of the services below:
+      </span>
       {connectors.map(({ name, displayName, connector }) => (
         <div key={name} className="flex hover:bg-gray-200">
           <Button
@@ -55,6 +58,8 @@ const ConnectWallet = ({ buttonClassName }) => {
           </Button>
         </div>
       ))}
+      
+
     </Popup>
   );
 };
