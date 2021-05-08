@@ -16,6 +16,7 @@ const AUTH_TYPES = {
   METAMASK: 'MetaMask',
   TORUS: 'Torus',
 };
+const chainId = 80001;
 
 const ABI = {
   erc20: getContractAbi(ContractNames.WrappedERC20),
@@ -29,12 +30,12 @@ const ABI = {
 };
 
 const web3Addresses = {
-    dispenser: getContractAddress(ContractNames.ERC1155),
-    weth: getContractAddress(ContractNames.WrappedERC20),
-    memeMinter: getContractAddress(ContractNames.ERC721),
-    factory: getContractAddress(ContractNames.UniswapV2Factory),
-    router: getContractAddress(ContractNames.UniswapV2Router),
-    bFactory: getContractAddress(ContractNames.BFactory),
+    dispenser: getContractAddress(ContractNames.ERC1155,chainId),
+    weth: getContractAddress(ContractNames.WrappedERC20,chainId),
+    memeMinter: getContractAddress(ContractNames.ERC721,chainId),
+    factory: getContractAddress(ContractNames.UniswapV2Factory,chainId),
+    router: getContractAddress(ContractNames.UniswapV2Router,chainId),
+    bFactory: getContractAddress(ContractNames.BFactory,chainId),
 };
 const ethProvider = new providers.JsonRpcProvider(config.ethProvider);
 
