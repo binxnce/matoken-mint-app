@@ -11,7 +11,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 toast.configure();
 
-import NFTMinter from "../abis/NFTMinter.json";
+import {
+  createMemeTransactions,
+  getMemeNextId,
+  getMemeTokenHash,
+} from "../utils/backend";
 
 const Form = ({
   signerAddress,
@@ -56,7 +60,7 @@ const Form = ({
   const [maxCopiesReseller, setMaxCopiesReseller] = useState(""); //Max Copies per Reseller
   const [payoutAPercent, setAPercent] = useState(""); //Payout - Artist Percentage
   const [payoutAAddress, setAAddress] = useState(""); //Payout - Artist Payout Address (hash)
-  
+
   // Clear Error Handling Hooks
   const [errors, setErrors] = useState({
     name: "",
@@ -140,7 +144,6 @@ const Form = ({
       setImgHash(cid);
       setErrors((prevErrors) => ({ ...prevErrors, file: "" }));
 
-
       if (event.target.files.length !== 0) {
         // Display Image Preview
         const reader = new FileReader();
@@ -157,8 +160,8 @@ const Form = ({
     }
   };
 
-   // Handle MUSIC file upload
-   const handleMusicFile = async (event) => {
+  // Handle MUSIC file upload
+  const handleMusicFile = async (event) => {
     if (event.target.files[0]?.size < 1e7) {
       setMusicFile(event.target.files[0]);
 
@@ -172,13 +175,15 @@ const Form = ({
       setErrors((prevErrors) => ({ ...prevErrors, file: "" }));
 
       if (event.target.files.length !== 0) {
-       {/* DISPLAY AUDIO FILE PLAYER
+        {
+          /* DISPLAY AUDIO FILE PLAYER
         const reader = new FileReader();
         reader.onload = (event) => {
           setImgSrc(event.target.result);
         };
       reader.readAsDataURL(event.target.files[1]);
-      */}
+      */
+        }
       }
     } else {
       setErrors((prevErrors) => ({
@@ -187,9 +192,9 @@ const Form = ({
       }));
     }
   };
-  
-   // Handle BONUS file upload
-   const handleBonusFile = async (event) => {
+
+  // Handle BONUS file upload
+  const handleBonusFile = async (event) => {
     if (event.target.files[0]?.size < 1e7) {
       setBonusFile(event.target.files[0]);
 
@@ -200,13 +205,15 @@ const Form = ({
       setErrors((prevErrors) => ({ ...prevErrors, file: "" }));
 
       if (event.target.files.length !== 0) {
-       {/* DISPLAY AUDIO FILE PLAYER
+        {
+          /* DISPLAY AUDIO FILE PLAYER
         const reader = new FileReader();
         reader.onload = (event) => {
           setImgSrc(event.target.result);
         };
       reader.readAsDataURL(event.target.files[1]);
-      */}
+      */
+        }
       }
     } else {
       setErrors((prevErrors) => ({
@@ -238,29 +245,37 @@ const Form = ({
           attributes: [
             {
               trait_type: "numtracks",
-              value: 1
-            },  {
+              value: 1,
+            },
+            {
               trait_type: "artistname",
-              value: name
-            },  {
+              value: name,
+            },
+            {
               trait_type: "genre",
-              value: genre
-            },  {
+              value: genre,
+            },
+            {
               trait_type: "subgenre",
-              value: subgenre
-            },  {
+              value: subgenre,
+            },
+            {
               trait_type: "releasedate",
-              value: 1
-            },  {
+              value: 1,
+            },
+            {
               trait_type: "UPC",
-              value: upcean
-            },  {
+              value: upcean,
+            },
+            {
               trait_type: "catalognumber",
               value: catalogNum,
-            },  {
+            },
+            {
               trait_type: "albumtype",
-              value: "Single"
-            }],
+              value: "Single",
+            },
+          ],
           album_title: title,
           artist_name: name,
           album_desc: description,
@@ -270,26 +285,50 @@ const Form = ({
           album_subgenre: subgenre,
           album_catalogNum: catalogNum,
           album_UPCEAN: upcean,
-          track1: musicHash ? "https://gateway.pinata.cloud/ipfs/" + musicHash : "",
-          bonus: bonusHash ? "https://gateway.pinata.cloud/ipfs/" + bonusHash : "",
+          track1: musicHash
+            ? "https://gateway.pinata.cloud/ipfs/" + musicHash
+            : "",
+          bonus: bonusHash
+            ? "https://gateway.pinata.cloud/ipfs/" + bonusHash
+            : "",
         });
         toast("JSON data uploaded to IPFS", { type: "success" });
       } catch (error) {
         console.log("Error Uploading files on IPFS", error);
       }
 
-      // Run Minting Process
-      const nftMinter = new ethers.Contract(
-        process.env.NEXT_PUBLIC_NFT_MINTER_ADDRESS,
-        NFTMinter,
-        library.getSigner(account)
-      );
-      nftMinter
-        .connect(library.getSigner(account))
-        .mint(account, initialCopies + onHoldPool, "0x" + Buffer.from(ipfsHash).toString("hex"))
-        .then(
-          (tx) => tx.wait() && toast("Successfully minted", { type: "success" })
-        );
+      const ethereumRequest = async (provider, data) => {
+        // Allow both `request` and `sendAsync` to support multiple wallets
+        if (provider.request) {
+          return provider.request(data);
+        }
+        return new Promise((resolve, reject) => {
+          provider.sendAsync(data, (error, success) => {
+            if (error) {
+              return reject(error);
+            }
+            return resolve(success.result);
+          });
+        });
+      };
+
+      const provider = new ethers.providers.Web3Provider(library.provider);
+
+      // Mint
+      const memeId = await getMemeNextId();
+      const memeTokenHash = await getMemeTokenHash(memeId);
+
+      const txs = await createMemeTransactions(memeId, memeTokenHash, account);
+      for (const { params } of txs) {
+        console.log(JSON.stringify(params));
+        await provider
+          .getSigner(account)
+          .sendTransaction({
+            to: params.to,
+            data: params.data,
+          })
+          .then((tx) => tx.wait());
+      }
     }
   };
 
@@ -305,27 +344,31 @@ const Form = ({
       {/* Cover Art */}
       <div className={classes.leftContainer}>
         <Typography variant="h6" className={classes.headerMain}>
-                Cover Art
+          Cover Art
         </Typography>
-        <div style={{ padding: imgSrc ? "50px 0px" : "10px 10px 10px 10px" }} className={classes.uploadContainer}>
-        {imgSrc ? (
+        <div
+          style={{ padding: imgSrc ? "50px 0px" : "10px 10px 10px 10px" }}
+          className={classes.uploadContainer}
+        >
+          {imgSrc ? (
             <div>
-            <img
-              src={imgSrc}
-              className={classes.previewImg}
-              alt="preview-img"
-            />
-          </div>
-        ) : (
-          <img src="img/coverart.svg" alt="upload" />
-        )}
+              <img
+                src={imgSrc}
+                className={classes.previewImg}
+                alt="preview-img"
+              />
+            </div>
+          ) : (
+            <img src="img/coverart.svg" alt="upload" />
+          )}
           {!imgSrc && (
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
                 Upload a static album cover art / preview file *
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-                JPG, GIF, MP4, MOV, PNG or HTML videos accepted. 10MB limit. Square image. 1600px recommended.
+                JPG, GIF, MP4, MOV, PNG or HTML videos accepted. 10MB limit.
+                Square image. 1600px recommended.
               </Typography>
             </React.Fragment>
           )}
@@ -336,7 +379,7 @@ const Form = ({
             type="file"
             hidden
           />
-          
+
           <label htmlFor="upload-file">
             <Button component="span" className={classes.uploadBtn}>
               {file ? file.name : "Upload Art"}
@@ -347,35 +390,34 @@ const Form = ({
               {errors.file}
             </Typography>
           )}
-        
-          
         </div>
         <Typography variant="h6" className={classes.headerMain}>
-                Track Details
+          Track Details
         </Typography>
-        
-        <div  className={classes.headerMain}>
-        <select className={classes.formGroupInput}>
-            <option value="Default">Select Album Type: (Default Basic Single)</option>
+
+        <div className={classes.headerMain}>
+          <select className={classes.formGroupInput}>
+            <option value="Default">
+              Select Album Type: (Default Basic Single)
+            </option>
           </select>
-          </div>
+        </div>
 
         {/* Music Upload 1 */}
-        
+
         <div className={classes.musicupload}>
-        
           <img src="img/musicfile.svg" alt="upload" />
-      
-        {(
+
+          {
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-                 TRACK #1: Upload Music File *
+                TRACK #1: Upload Music File *
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
                 MP3, WAV, AIFF audio files accepted. 10MB limit.
               </Typography>
             </React.Fragment>
-          )}
+          }
 
           <input
             accept="audio/*"
@@ -401,25 +443,24 @@ const Form = ({
           )}
         </div>
 
-  
         {/* Bonus content */}
-        <Typography variant="h6"className={classes.headerMain}>
-                Bonus Content
+        <Typography variant="h6" className={classes.headerMain}>
+          Bonus Content
         </Typography>
 
-         <div className={classes.musicupload}>
-            
+        <div className={classes.musicupload}>
           <img src="img/bonuscontent.svg" alt="upload" />
-        {(
+          {
             <React.Fragment>
               <Typography variant="h6" className={classes.uploadTitle}>
-                 (optional) Upload Bonus Content #1
+                (optional) Upload Bonus Content #1
               </Typography>
               <Typography variant="h6" className={classes.uploadTitle2}>
-               JPG, PNG, TIFF, EPS, MP4, MP3, WAV, AIFF, PDF accepted. 10MB limit.
+                JPG, PNG, TIFF, EPS, MP4, MP3, WAV, AIFF, PDF accepted. 10MB
+                limit.
               </Typography>
             </React.Fragment>
-          )}
+          }
 
           <input
             accept="audio/*, video/*, image/*, .html, .pdf"
@@ -428,7 +469,7 @@ const Form = ({
             type="file"
             hidden
           />
-               
+
           <label htmlFor="upload-bonus">
             <Button component="span" className={classes.uploadBtn}>
               {bonusFile ? bonusFile.name : "Upload Bonus Content"}
@@ -440,54 +481,51 @@ const Form = ({
             </Typography>
           )}
         </div>
-        </div>
-  
+      </div>
+
       {/* Divider Line */}
       <div className={classes.divider}></div>
 
       {/* *** Right Side Container *** */}
-      <div className={classes.rightContainer}> <Typography variant="h6" className={classes.headerMain}>
-                Album Details
+      <div className={classes.rightContainer}>
+        {" "}
+        <Typography variant="h6" className={classes.headerMain}>
+          Album Details
         </Typography>
-      <div className={classes.halfContainer}>
-    
+        <div className={classes.halfContainer}>
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>Artist Name *</label>
+            <input
+              type="text"
+              style={{
+                border: errors.name ? "1px solid tomato" : "1px solid black",
+              }}
+              placeholder="The artist formerly known as Prince"
+              className={classes.formGroupInput}
+              value={name}
+              onChange={(e) => {
+                setAName(e.target.value);
+                setErr("");
+                setErrors((pS) => ({ ...pS, name: "" }));
+              }}
+              onBlur={validateName}
+              required
+            />
+            {errors.name && <p className={classes.error}>{errors.name}</p>}
+          </div>
 
-      <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>Artist Name *</label>
-          <input
-            type="text"
-            style={{
-              border: errors.name ? "1px solid tomato" : "1px solid black",
-            }}
-            placeholder="The artist formerly known as Prince"
-            className={classes.formGroupInput}
-            value={name}
-            onChange={(e) => {
-              setAName(e.target.value);
-              setErr("");
-              setErrors((pS) => ({ ...pS, name: "" }));
-            }}
-            onBlur={validateName}
-            required
-          />
-          {errors.name && <p className={classes.error}>{errors.name}</p>}
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>Artist URL</label>
+            <input
+              type="url"
+              placeholder="http://www.bohemianyc.com"
+              className={classes.formGroupInput}
+              value={aurl}
+              pattern="https?://.+"
+              onChange={(e) => setAurl(e.target.value)}
+            />
+          </div>
         </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Artist URL
-          </label>
-          <input
-            type="url"
-            placeholder="http://www.bohemianyc.com"
-            className={classes.formGroupInput}
-            value={aurl}
-            pattern="https?://.+"
-            onChange={(e) => setAurl(e.target.value)}
-          />
-        </div>
-        </div>
-
         <div className={classes.formTitle}>
           <label className={classes.formTitleLabel}>Album Title *</label>
           <input
@@ -508,7 +546,6 @@ const Form = ({
           />
           {errors.title && <p className={classes.error}>{errors.title}</p>}
         </div>
-
         <div className={classes.formTitle}>
           <label className={classes.formTitleLabel}>Album Description *</label>
           <textarea
@@ -529,9 +566,8 @@ const Form = ({
           ></textarea>
           {errors.desc && <p className={classes.error}>{errors.desc}</p>}
         </div>
-        
         <div className={classes.formTitle}>
-        <label className={classes.formTitleLabel}>Credits (Humans)</label>
+          <label className={classes.formTitleLabel}>Credits (Humans)</label>
           <textarea
             type="text"
             style={{
@@ -547,14 +583,14 @@ const Form = ({
             }}
           ></textarea>
         </div>
-
         <div className={classes.formTitle}>
-        <label className={classes.formTitleLabel}>Company Credits</label>
+          <label className={classes.formTitleLabel}>Company Credits</label>
           <textarea
             type="text"
             style={{
               border: "1px solid black",
-            }}ds
+            }}
+            ds
             className={classes.formGroupInputDesc}
             value={companyCredits}
             placeholder="Published By, Recorded At, Distributed by, Copyright Info"
@@ -565,237 +601,233 @@ const Form = ({
             }}
           ></textarea>
         </div>
-
         <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Genre *
-          </label>
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>Genre *</label>
 
-          <select className={classes.formGroupInput} 
-          onChange={(e) => {
-              setErrors((pS) => ({ ...pS, genre: "" }));
-              setErr("");
-              setGenre(e.target.value);
-            }}>
-            <option value="">Select Genre:</option>
-            <option value="1">Pop</option>
-            <option value="2">Rock</option>
-            <option value="3">Metal / Heavy</option>
-            <option value="4">Electronic</option>
-            <option value="5">Underground Electronic</option>
-            <option value="6">Chillout/Ambient</option>
-            <option value="7">HipHop/Rap</option>
-            <option value="8">Funk / Disco</option>
-            <option value="9">R + B / Soul</option>
-            <option value="10">Reggae</option>
-            <option value="11">Latin</option>
-            <option value="12">Country</option>
-            <option value="13">Classical</option>
-            <option value="14">Folk/Regional</option>
-            <option value="15">Jazz</option>
-            <option value="16">Faith / Religous Music</option>
-            <option value="17">Acoustic / Instrumental</option>
-            <option value="18">Experimental</option>
-            <option value="19">Spoken Word / Vocal Only</option>
-            <option value="20">Samples / Sounds / Utility</option>
-            <option value="999">Custom</option>
-          </select>
-          
-        </div>
+            <select
+              className={classes.formGroupInput}
+              onChange={(e) => {
+                setErrors((pS) => ({ ...pS, genre: "" }));
+                setErr("");
+                setGenre(e.target.value);
+              }}
+            >
+              <option value="">Select Genre:</option>
+              <option value="1">Pop</option>
+              <option value="2">Rock</option>
+              <option value="3">Metal / Heavy</option>
+              <option value="4">Electronic</option>
+              <option value="5">Underground Electronic</option>
+              <option value="6">Chillout/Ambient</option>
+              <option value="7">HipHop/Rap</option>
+              <option value="8">Funk / Disco</option>
+              <option value="9">R + B / Soul</option>
+              <option value="10">Reggae</option>
+              <option value="11">Latin</option>
+              <option value="12">Country</option>
+              <option value="13">Classical</option>
+              <option value="14">Folk/Regional</option>
+              <option value="15">Jazz</option>
+              <option value="16">Faith / Religous Music</option>
+              <option value="17">Acoustic / Instrumental</option>
+              <option value="18">Experimental</option>
+              <option value="19">Spoken Word / Vocal Only</option>
+              <option value="20">Samples / Sounds / Utility</option>
+              <option value="999">Custom</option>
+            </select>
+          </div>
 
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Sub Genre
-          </label>
-          <select className={classes.formGroupInput}
-            onChange={(e) => {
-              setErrors((pS) => ({ ...pS, subgenre: "" }));
-              setErr("");
-              setSubGenre(e.target.value);
-            }}>
-            <option value="">Select Sub Genre: (Default None)</option>
-            <option value="1">dance pop</option>
-            <option value="2">pop rap</option>
-            <option value="3">Reggae</option>
-            <option value="4">southern hip hop</option>
-            <option value="5">alternative rock</option>
-            <option value="6">alternative metal</option>
-            <option value="7">classic rock</option>
-            <option value="8">psychadellic rock</option>
-            <option value="9">latin pop</option>
-            <option value="10">techno</option>
-            <option value="11">trance</option>
-            <option value="12">electro house</option>
-            <option value="13">progressive house</option>
-            <option value="14">deep house</option>
-            <option value="15">synthpop</option>
-            <option value="16">reggaeton flow</option>
-            <option value="17">lo-fi</option>
-            <option value="18">christian rock</option>
-            <option value="99999">custom</option>
-          </select>
-          
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>Sub Genre</label>
+            <select
+              className={classes.formGroupInput}
+              onChange={(e) => {
+                setErrors((pS) => ({ ...pS, subgenre: "" }));
+                setErr("");
+                setSubGenre(e.target.value);
+              }}
+            >
+              <option value="">Select Sub Genre: (Default None)</option>
+              <option value="1">dance pop</option>
+              <option value="2">pop rap</option>
+              <option value="3">Reggae</option>
+              <option value="4">southern hip hop</option>
+              <option value="5">alternative rock</option>
+              <option value="6">alternative metal</option>
+              <option value="7">classic rock</option>
+              <option value="8">psychadellic rock</option>
+              <option value="9">latin pop</option>
+              <option value="10">techno</option>
+              <option value="11">trance</option>
+              <option value="12">electro house</option>
+              <option value="13">progressive house</option>
+              <option value="14">deep house</option>
+              <option value="15">synthpop</option>
+              <option value="16">reggaeton flow</option>
+              <option value="17">lo-fi</option>
+              <option value="18">christian rock</option>
+              <option value="99999">custom</option>
+            </select>
+          </div>
         </div>
-        </div>
-
         <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Catalog Number
-          </label>
-          <input
-            type="text"
-            placeholder="BYC002"
-            className={classes.formGroupInput}
-            value={catalogNum}
-            onChange={(e) => setCatalogNum(e.target.value)}
-          />
-        </div>
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>Catalog Number</label>
+            <input
+              type="text"
+              placeholder="BYC002"
+              className={classes.formGroupInput}
+              value={catalogNum}
+              onChange={(e) => setCatalogNum(e.target.value)}
+            />
+          </div>
 
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            UPC/EAN
-          </label>
-          <input
-            type="text"
-            placeholder="721762628393"
-            className={classes.formGroupInput}
-            value={upcean}
-            onChange={(e) => setUPCEAN(e.target.value)}
-          />
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>UPC/EAN</label>
+            <input
+              type="text"
+              placeholder="721762628393"
+              className={classes.formGroupInput}
+              value={upcean}
+              onChange={(e) => setUPCEAN(e.target.value)}
+            />
+          </div>
         </div>
-        </div>
-        
         <Typography variant="h6" className={classes.headerMain}>
-                Economic Details
+          Economic Details
         </Typography>
-
         <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Initial Sale Price *
-          </label>
-          <input
-            type='text'
-            placeholder="$5"
-            style={{
-              border: errors.initialPrice ? "1px solid tomato" : "1px solid black",
-            }}
-            className={classes.formGroupInput}
-            value={initialPrice}
-            onChange={(e) => setInitialPrice(e.target.value)}
-            onBlur={validateInitialPrice}
-            required
-          />
-          {errors.initialPrice && <p className={classes.error}>{errors.initialPrice}</p>}
-        </div>
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>
+              Initial Sale Price *
+            </label>
+            <input
+              type="text"
+              placeholder="$5"
+              style={{
+                border: errors.initialPrice
+                  ? "1px solid tomato"
+                  : "1px solid black",
+              }}
+              className={classes.formGroupInput}
+              value={initialPrice}
+              onChange={(e) => setInitialPrice(e.target.value)}
+              onBlur={validateInitialPrice}
+              required
+            />
+            {errors.initialPrice && (
+              <p className={classes.error}>{errors.initialPrice}</p>
+            )}
+          </div>
 
+          <div className={classes.halfContainer}>
+            <div className={classes.formTitleHalf}>
+              <label className={classes.formTitleLabel}>Initial Copies *</label>
+              <input
+                type="text"
+                placeholder="1000"
+                style={{
+                  border: errors.initialCopies
+                    ? "1px solid tomato"
+                    : "1px solid black",
+                }}
+                className={classes.formGroupInput}
+                value={initialCopies}
+                onChange={(e) => setInitialCopies(e.target.value)}
+                onBlur={validateInitialCopies}
+                required
+              />
+              {errors.initialCopies && (
+                <p className={classes.error}>{errors.initialCopies}</p>
+              )}
+            </div>
+
+            <div className={classes.formTitleHalf}>
+              <label className={classes.formTitleLabel}>
+                On Hold in Pool *
+              </label>
+              <input
+                type="text"
+                placeholder="1000"
+                style={{
+                  border: errors.onHoldPool
+                    ? "1px solid tomato"
+                    : "1px solid black",
+                }}
+                className={classes.formGroupInput}
+                value={onHoldPool}
+                onChange={(e) => setOnHoldPool(e.target.value)}
+                onBlur={validateOnHoldPool}
+                required
+              />
+              {errors.onHoldPool && (
+                <p className={classes.error}>{errors.onHoldPool}</p>
+              )}
+            </div>
+          </div>
+        </div>
         <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Initial Copies *
-          </label>
-          <input
-            type='text'
-            placeholder="1000"
-            style={{
-              border: errors.initialCopies ? "1px solid tomato" : "1px solid black",
-            }}
-            className={classes.formGroupInput}
-            value={initialCopies}
-            onChange={(e) => setInitialCopies(e.target.value)}
-            onBlur={validateInitialCopies}
-            required
-          />
-          {errors.initialCopies && <p className={classes.error}>{errors.initialCopies}</p>}
-        </div>
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>
+              Max Copies per Customer
+            </label>
+            <input
+              type="text"
+              placeholder="5"
+              className={classes.formGroupInput}
+              value={maxCopiesCustomer}
+              onChange={(e) => setMaxCopiesCustomer(e.target.value)}
+            />
+          </div>
 
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            On Hold in Pool *
-          </label>
-          <input
-            type='text'
-            placeholder="1000"
-            style={{
-              border: errors.onHoldPool ? "1px solid tomato" : "1px solid black",
-            }}
-            className={classes.formGroupInput}
-            value={onHoldPool}
-            onChange={(e) => setOnHoldPool(e.target.value)}
-            onBlur={validateOnHoldPool}
-            required
-          />
-          {errors.onHoldPool && <p className={classes.error}>{errors.onHoldPool}</p>}
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>
+              Max Copies per Reseller
+            </label>
+            <input
+              type="text"
+              placeholder="100"
+              className={classes.formGroupInput}
+              value={maxCopiesReseller}
+              onChange={(e) => setMaxCopiesReseller(e.target.value)}
+            />
+          </div>
         </div>
-        </div>
-        </div>
-
+        <label className={classes.formTitleLabel}>Payout Info</label>
+        <select className={classes.formGroupInput}>
+          <option value="Default">
+            Select Payout Parties: (Default Artist Only)
+          </option>
+          <option value="Psy">Artist Only</option>
+        </select>
         <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Max Copies per Customer
-          </label>
-          <input
-             type='text'
-            placeholder="5"
-            className={classes.formGroupInput}
-            value={maxCopiesCustomer}
-            onChange={(e) => setMaxCopiesCustomer(e.target.value)}
-          />
-        </div>
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>
+              Artist Payout Percentage
+            </label>
+            <input
+              type="text"
+              placeholder="100%"
+              className={classes.formGroupInput}
+              value={payoutAPercent}
+              onChange={(e) => setAPercent(e.target.value)}
+            />
+          </div>
 
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Max Copies per Reseller
-          </label>
-          <input
-            type="text"
-            placeholder="100"
-            className={classes.formGroupInput}
-            value={maxCopiesReseller}
-            onChange={(e) => setMaxCopiesReseller(e.target.value)}
-          />
+          <div className={classes.formTitleHalf}>
+            <label className={classes.formTitleLabel}>
+              Artist Payout Address
+            </label>
+            <input
+              type="text"
+              placeholder="eth address 0xe3rw..."
+              className={classes.formGroupInput}
+              value={payoutAAddress}
+              onChange={(e) => setAAddress(e.target.value)}
+            />
+          </div>
         </div>
-        </div>
-
-          <label className={classes.formTitleLabel}>
-            Payout Info
-          </label>
-          <select className={classes.formGroupInput}>
-            <option value="Default">Select Payout Parties: (Default Artist Only)</option>
-            <option value="Psy">Artist Only</option>
-          </select>
-
-        <div className={classes.halfContainer}>
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Artist Payout Percentage
-          </label>
-          <input
-            type="text"
-            placeholder="100%"
-            className={classes.formGroupInput}
-            value={payoutAPercent}
-            onChange={(e) => setAPercent(e.target.value)}
-          />
-        </div>
-
-        <div className={classes.formTitleHalf}>
-          <label className={classes.formTitleLabel}>
-            Artist Payout Address
-          </label>
-          <input
-            type="text"
-            placeholder="eth address 0xe3rw..."
-            className={classes.formGroupInput}
-            value={payoutAAddress}
-            onChange={(e) => setAAddress(e.target.value)}
-          />
-        </div>
-        </div>
-
         <div className={classes.lastSec}>
           <div className={classes.note}>
             Once your MAToken NFT is minted on the Polygon blockchain, you will
@@ -803,7 +835,7 @@ const Form = ({
           </div>
           <Button
             type="submit"
-            disabled={imgHash ? false : true}
+            // disabled={imgHash ? false : true}
             className={classes.submit}
           >
             Submit
@@ -868,7 +900,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     background: "#dddddd",
     borderRadius: 12,
-    marginBottom:10,
+    marginBottom: 10,
   },
   uploadTitle: {
     fontSize: 18,
@@ -925,12 +957,12 @@ const useStyles = makeStyles((theme) => ({
     padding: "0.25rem",
   },
   formTitleHalf: {
-    width:"50%",
+    width: "50%",
     margin: "0 auto 1rem auto",
     padding: "0.25rem",
   },
   halfContainer: {
-    width:"100%",
+    width: "100%",
     display: "flex",
   },
   formTitleLabel: {
