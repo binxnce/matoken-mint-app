@@ -6,7 +6,7 @@ import OwnedMemes from '../../components/OwnedMemes';
 const ProfileOwnedMemes = () => (
   <>
     <Head>
-      <title>Owned memes - MemeSwap</title>
+      <title>Owned memes - Matoken</title>
     </Head>
     <ProfileSubpage ContentComponent={OwnedMemes} />
   </>

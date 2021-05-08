@@ -14,24 +14,23 @@ const Bar = styled(Navbar)`
 
 const Logo = styled(Navbar.Brand)`
   &&,
-  &&:active,
-  &&:visited {
+  &&:active{width:300px},
+  &&:visited {width:300px
     color: white;
-    background: #5d5d5d;
-    padding: 0.5em 1em;
+    padding: 0 1em;
     font-size: 1em;
-  }
+  },
 `;
 
 const AppNav = () => {
   return (
     <Bar variant="light" expand="sm" collapseOnSelect>
       <Link href="/" passHref>
-        <Logo>MemeSwap</Logo>
+        <Logo><img src="images/logo.svg"></img></Logo>
       </Link>
-      <Link href="/about" passHref>
+      {/*<Link href="/about" passHref>
         About / FAQ
-      </Link>
+    </Link>*/}
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse>
         {/* <Nav>

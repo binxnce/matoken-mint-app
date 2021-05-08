@@ -1,8 +1,8 @@
 import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
+import { theme } from "../utils/theme.js";
 
 import { pinJSONToIPFS, pinFileToIPFS } from "../utils/ipfs";
 
@@ -315,7 +315,7 @@ const Form = () => {
               />
             </div>
           ) : (
-            <img src="img/coverart.svg" alt="upload" />
+            <img src="images/coverart.svg" alt="upload" />
           )}
           {!imgSrc && (
             <React.Fragment>
@@ -328,6 +328,7 @@ const Form = () => {
               </h6>
             </React.Fragment>
           )}
+
           <input
             accept="audio/*, video/*, image/*, .html, .pdf"
             id="upload-file"
@@ -356,7 +357,7 @@ const Form = () => {
         {/* Music Upload 1 */}
 
         <div className={classes.musicupload}>
-          <img src="img/musicfile.svg" alt="upload" />
+          <img src="images/musicfile.svg" alt="upload" />
 
           {
             <React.Fragment>
@@ -395,7 +396,7 @@ const Form = () => {
         <h6 className={classes.headerMain}>Bonus Content</h6>
 
         <div className={classes.musicupload}>
-          <img src="img/bonuscontent.svg" alt="upload" />
+          <img src="images/bonuscontent.svg" alt="upload" />
           {
             <React.Fragment>
               <h6 className={classes.uploadTitle}>
@@ -782,14 +783,26 @@ const useStyles = makeStyles({
   root: {
     display: "flex",
     justifyContent: "space-between",
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+    },
   },
   leftContainer: {
     width: "48%",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      height: "max-content",
+    },
   },
   uploadContainer: {
     backgroundColor: "#F3F4F7",
     borderRadius: 20,
     margin: "10px 0px 16px 00px",
+    textAlign:"center",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      height: "max-content",
+    },
   },
   musicupload: {
     width: "100%",
@@ -798,6 +811,11 @@ const useStyles = makeStyles({
     padding: "15px 0 0 0",
     height: "max-content",
     borderRadius: 20,
+    textAlign:"center",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      height: "max-content",
+    },
   },
   previewImg: {
     maxWidth: 400,
@@ -812,6 +830,7 @@ const useStyles = makeStyles({
     background: "#dddddd",
     borderRadius: 12,
     marginBottom: 10,
+    textAlign:"center",
   },
   uploadTitle: {
     fontSize: 18,
@@ -847,10 +866,16 @@ const useStyles = makeStyles({
 
   divider: {
     border: "1px solid #DCDFE6",
+    [theme.breakpoints.down("md")]: {
+      display: "none",
+    },
   },
 
   rightContainer: {
     width: "48%",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
   },
   formTitle: {
     margin: "0 auto 1rem auto",
@@ -868,7 +893,7 @@ const useStyles = makeStyles({
   formTitleLabel: {
     display: "flex",
     alignItems: "center",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 500,
     marginBottom: 10,
   },
@@ -934,11 +959,21 @@ const useStyles = makeStyles({
   lastSec: {
     display: "flex",
     justifyContent: "space-between",
+    textAlign:"center",
+    [theme.breakpoints.down("md")]: {
+      display: "block",
+      margin: "30px 0",
+    },
   },
   note: {
     color: "#6E798F",
-    maxWidth: 370,
+    width: 290,
+    fontSize: 12,
     margin: "auto 0",
+    textAlign:"center",
+    [theme.breakpoints.down("md")]: {
+      width:"100%",
+    },
   },
   submit: {
     background: "#15a64f",

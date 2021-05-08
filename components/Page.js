@@ -7,7 +7,7 @@ import useFacebook from '../hooks/useFacebook';
 import AppNav from './AppNav';
 import Footer from './Footer';
 import Meta from './Meta';
-import CreateMemeModal from './CreateMemeModal';
+{/*import CreateMemeModal from './CreateMemeModal';*/}
 import LoginModal, { OpenLoginModalContext } from './LoginModal';
 import Websocket from './Websocket';
 import Toasts from './Toasts';
@@ -43,7 +43,7 @@ const Page = (props) => {
             <ContentWrapper>{props.children}</ContentWrapper>
           </Container>
           <Footer className="mt-auto" />
-          <CreateMemeModal />
+          {/*<CreateMemeModal />*/}
           <LoginModal show={isLoginModalShown} onHide={() => setIsLoginModalShown(false)} />
         </MainWrapper>
       </OpenLoginModalContext.Provider>

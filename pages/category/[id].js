@@ -30,8 +30,8 @@ const Category = (props) => {
   return (
     <>
       <Head>
-        <title>{categoryName} - Dank web</title>
-        <meta property="og:title" content={`${categoryName} - Dank web`} />
+        <title>{categoryName}</title>
+        <meta property="og:title" content={`${categoryName}`} />
       </Head>
       <SpacedRow>
         <Col>

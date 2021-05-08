@@ -154,10 +154,10 @@ const LoginModal = (props) => {
         <Button variant="primary" onClick={loginMetamask}>
           Metamask
         </Button>
-        {/*<Button variant="primary" onClick={loginWalletConnect}>
+        <Button variant="primary" onClick={loginWalletConnect}>
           WalletConnect
-        </Button>*/}
-        <Button variant="tertiary" onClick={loginTorus}>
+        </Button>
+        <Button variant="primary" onClick={loginTorus}>
           Social Login
         </Button>
       </Modal>

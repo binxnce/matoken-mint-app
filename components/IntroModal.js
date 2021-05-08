@@ -30,21 +30,18 @@ const IntroModal = (props) => {
   return (
     <Modal {...props}>
       <Wrapper>
-        <ModalTitle>Welcome to MemeSwap</ModalTitle>
+        <ModalTitle>Welcome to MATOKEN Press</ModalTitle>
 
         {/* intro image */}
         {/* <img src="" alt="" /> */}
 
         <Message>
           {/* placeholder */}
-          Commodo ad pariatur ex esse mollit ullamco velit enim deserunt. Esse in aute et tempor et officia aliquip
-          reprehenderit occaecat nisi ea nulla eu ullamco. Aute duis laborum irure in excepteur eu reprehenderit
-          pariatur consequat amet labore tempor. Officia occaecat cillum qui consectetur. Ipsum anim incididunt
-          cupidatat voluptate consectetur esse commodo.
+          Close this window, and then fill out the form, to mint a matoken. Matokens will be stored in the wallet you logged in with, so please make sure you are signed in with the correct account. This service is for legally owned content only, minting unauthoried content is not allowed.
         </Message>
 
-        {/*<Button onClick={() => goToPage('/TODO')}>View Meme of the Day</Button>*/}
-        <Button onClick={() => goToPage('/')}>Browse all memes</Button>
+        {/*<Button onClick={() => goToPage('/TODO')}>View Meme of the Day</Button>
+        <Button onClick={() => goToPage('/')}>Browse all memes</Button>*/}
       </Wrapper>
     </Modal>
   );
