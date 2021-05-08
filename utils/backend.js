@@ -556,8 +556,6 @@ async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress) 
   }
   
   async function addLiquidityTransactions(
-    userId,
-    memeId,
     memeTokenHash,
     memeTokenDeposit,
     ethDeposit,
