@@ -1,13 +1,13 @@
 import { EnvNames } from 'etherspot';
 
 const config = {
-  webUrl: 'https://matokenswap.pillarproject.io',
-  apiUrl: 'https://matokenswap.pillarproject.io/api',
-  socketsServerUrl: 'https://matokenswap.pillarproject.io',
-  storageUrl: 'https://d1dogjlgz8ks8z.cloudfront.net',
-  categories: ['funny', 'gif', 'animals', 'savage', 'gaming'],
-  chainId: 100,
-  bcxUrl: 'https://blockscout.com/poa/xdai/tx/',
+  webUrl: 'http://localhost:7777',
+  apiUrl: 'http://localhost:7777',
+  socketsServerUrl: 'http://localhost:7777',
+  storageUrl: 'http://localhost:7777',
+  categories: ['Rock', 'Blues', 'Metal', 'Pop'],
+  chainId: 80001,
+  bcxUrl: 'https://explorer-mumbai.maticvigil.com/tx/',
   mainToken: null,
   mainTokenTicker: null,
   mainTokenDetails: null,
@@ -16,13 +16,13 @@ const config = {
   mixpanelHost: 'https://api-eu.mixpanel.com',
   production: true,
   etherspot: {
-    projectKey: 'dank-xdai',
-    networkName: 'xdai',
+    projectKey: 'matokenswap-mint',
+    networkName: 'mumbai',
     env: EnvNames.MainNets,
   },
   displayPrecisions: {
     ETH: 5,
-    BNB: 3,
+    MATIC: 3,
     $: 3,
     DAI: 3,
   },

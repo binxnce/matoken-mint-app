@@ -47,10 +47,6 @@ const About = () => {
           </p>
           <br />
           <p>
-            Have ideas or suggestions? Reach us at{' '}
-            <a href="mailto:matokenswap@pillarproject.io">matokenswap@pillarproject.io</a>
-          </p>
-          <p>
             <br />
           </p>
           <h2>FAQ</h2>
