@@ -421,20 +421,7 @@ async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress) 
     ethMinDeposit,
     userAddress,
   ) {
-    let addLiquidityParams;
-    const ethAsMainToken = !config.mainToken;
-  
-    if (ethAsMainToken) {
-      addLiquidityParams = getAddLiquidityETHParams(
-        memeTokenHash,
-        memeTokenDeposit,
-        ethDeposit,
-        memeTokenMinDeposit,
-        ethMinDeposit,
-        userAddress,
-      );
-    } else {
-      addLiquidityParams = getAddLiquidityTokenParams(
+    let addLiquidityParams = getAddLiquidityTokenParams(
         memeTokenHash,
         memeTokenDeposit,
         ethDeposit,
