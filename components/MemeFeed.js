@@ -61,10 +61,10 @@ const MemeFeed = (props) => {
     <>
       <Head>
         <title>Dank web memes</title>
-        <meta property="og:title" content="Dank web memes" />
-        <meta property="og:description" content="Best stonk gang. Best dank web. Memes, funny videos and pics." />
-        <meta property="og:url" content="https://meme.pillarproject.io/" />
-        <meta property="og:image" content="https://meme.pillarproject.io/images/logo.png" />
+        <meta property="og:title" content="MAtoken Mint" />
+        <meta property="og:description" content="Mint your music albums to Polygon" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="logo.svg" />
       </Head>
       <InfiniteScroll
         onScroll={handleScroll}

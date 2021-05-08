@@ -27,17 +27,10 @@ const AppNav = () => {
   return (
     <Bar variant="light" expand="sm" collapseOnSelect>
       <Link href="/" passHref>
-        <Logo>matokenswap</Logo>
-      </Link>
-      <Link href="/about" passHref>
-        About / FAQ
+        <Logo>Matoken Swap</Logo>
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse>
-        {/* <Nav>
-          <LinkNavItem href="/TODO">Meme of the day</LinkNavItem>
-          <LinkNavItem href="/TODO">Random meme</LinkNavItem>
-        </Nav> */}
         <Auth />
       </Navbar.Collapse>
     </Bar>

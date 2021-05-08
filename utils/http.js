@@ -1,8 +1,13 @@
 import fetch from 'isomorphic-fetch';
 import https from 'https';
+import http from 'http';
 import config from '../config';
 
-const agent = new https.Agent({
+// const agent = new https.Agent({
+//   rejectUnauthorized: false,
+// });
+
+const agent = new http.Agent({
   rejectUnauthorized: false,
 });
 
