@@ -421,7 +421,7 @@ async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress) 
     ethMinDeposit,
     userAddress,
   ) {
-    let addLiquidityParams = getAddLiquidityTokenParams(
+    const addLiquidityParams = getAddLiquidityTokenParams(
         memeTokenHash,
         memeTokenDeposit,
         ethDeposit,
@@ -431,21 +431,15 @@ async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress) 
       );
     }
   
-    const mainTokenAllowance = [];
-    if (!ethAsMainToken) {
-      mainTokenAllowance.push({
-        spenderAddress: web3Addresses.router,
-        contractAddress: config.mainToken,
-        contractType: CONTRACT_TYPE.ERC20,
-      });
-    }
-  
     const transactionQueue = [
       {
         params: addLiquidityParams,
-        type: TRANSACTION_TYPE.ADD_LIQUIDITY,
         allowance: [
-          ...mainTokenAllowance,
+          {
+            spenderAddress: web3Addresses.router,
+            contractAddress: config.mainToken,
+            contractType: CONTRACT_TYPE.ERC20,
+          },
           {
             spenderAddress: web3Addresses.router,
             contractAddress: web3Addresses.dispenser,
