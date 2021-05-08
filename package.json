@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.11.4",
-    "@matokenswap/contracts": "^0.1.0",
+    "@matokenswap/contracts": "^0.2.0",
     "@ramp-network/ramp-instant-sdk": "^2.4.1",
     "@toruslabs/torus-embed": "^1.8.6",
     "@walletconnect/client": "^1.2.1",
