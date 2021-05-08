@@ -9,7 +9,7 @@ const {
 const abiCoder = require('web3-eth-abi');
 const moment = require('moment');
 const config = require('../config');
-const {getContractAbi, ContractNames} = require('@matoken/contracts');
+const {getContractAbi, getContractAddress, ContractNames} = require('@matoken/contracts');
 // const Sequence = require('../models/Sequence');
 const AUTH_TYPES = {
   WALLET_CONNECT: 'WalletConnect',
@@ -24,8 +24,18 @@ const ABI = {
   factory: getContractAbi(ContractNames.UniswapV2Factory),
   router: getContractAbi(ContractNames.UniswapV2Router),
   pair: getContractAbi(ContractNames.UniswapV2Pair),
+  bFactory: getContractAbi(ContractNames.BFactory),
+  bPool: getContractAbi(ContractNames.BPool),
 };
 
+const web3Addresses = {
+    dispenser: getContractAddress(ContractNames.ERC1155),
+    weth: getContractAddress(ContractNames.WrappedERC20),
+    memeMinter: getContractAddress(ContractNames.ERC721),
+    factory: getContractAddress(ContractNames.UniswapV2Factory),
+    router: getContractAddress(ContractNames.UniswapV2Router),
+    bFactory: getContractAddress(ContractNames.BFactory),
+};
 const ethProvider = new providers.JsonRpcProvider(config.ethProvider);
 
 
@@ -102,12 +112,6 @@ async function safeUnlink(path) {
   }
 }
 
-async function getNextId(name = 'memes') {
-  // const doc = await Sequence.findOneAndUpdate({ name }, { $inc: { value: 1 } }, { new: true, upsert: true });
-  let doc;
-  return doc.value;
-}
-
 function isValidAuthType(type) {
   return Object.values(AUTH_TYPES).includes(type);
 }
@@ -151,7 +155,6 @@ function formTransactionObj(encodedFunction, to, value = '') {
 function setDeadline(addMinutes) {
   return Math.round((+new Date() + 1000 * 60 * addMinutes) / 1000);
 }
-
 // --------- WRAPPED ERC20 (ERC20) -----------------------
 
 const erc20Abi = ABI.erc20;
@@ -160,11 +163,11 @@ const erc20ApproveMethod = erc20Abi.find(({ name }) => name === 'approve');
 
 function getApproveBaseTokensForRouterParams() {
   const encodedFunction = abiCoder.encodeFunctionCall(erc20ApproveMethod, [
-    config.web3Addresses.router,
+    web3Addresses.router,
     ethers.utils.hexlify(ethers.constants.MaxUint256),
   ]);
 
-  return formTransactionObj(encodedFunction, config.mainToken || config.web3Addresses.weth);
+  return formTransactionObj(encodedFunction, config.mainToken || web3Addresses.weth);
 }
 
 async function getUserBalance(address) {
@@ -187,13 +190,13 @@ async function getErc20Allowance(userAddress, spenderAddress) {
 // --------- DISPENSER (ERC1155) ------------------
 
 const erc1155Abi = ABI.erc1155;
-const erc1155Contract = new ethers.Contract(config.web3Addresses.dispenser, erc1155Abi, ethProvider);
+const erc1155Contract = new ethers.Contract(web3Addresses.dispenser, erc1155Abi, ethProvider);
 const erc1155ApproveMethod = erc1155Abi.find(({ name }) => name === 'setApprovalForAll');
 
 function getApproveDispenserForRouterParams() {
-  const encodedFunction = abiCoder.encodeFunctionCall(erc1155ApproveMethod, [config.web3Addresses.router, true]);
+  const encodedFunction = abiCoder.encodeFunctionCall(erc1155ApproveMethod, [web3Addresses.router, true]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.dispenser);
+  return formTransactionObj(encodedFunction, web3Addresses.dispenser);
 }
 
 async function getMemeTokenBalance(memeTokenHash, userAddress) {
@@ -214,7 +217,7 @@ const erc721MintMethod = erc721Abi.find(({ name }) => name === 'publicMint');
 function getMintMemeParams(userAddress, uniqueId) {
   const encodedFunction = abiCoder.encodeFunctionCall(erc721MintMethod, [userAddress, uniqueId]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.memeMinter);
+  return formTransactionObj(encodedFunction, web3Addresses.memeMinter);
 }
 
 const erc721DepositMethod = erc721Abi.find(({ name }) => name === 'safeTransferFrom');
@@ -222,23 +225,23 @@ const erc721DepositMethod = erc721Abi.find(({ name }) => name === 'safeTransferF
 function getDepositMemeParams(userAddress, uniqueId) {
   const encodedFunction = abiCoder.encodeFunctionCall(erc721DepositMethod, [
     userAddress,
-    config.web3Addresses.dispenser,
+    web3Addresses.dispenser,
     uniqueId,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.memeMinter);
+  return formTransactionObj(encodedFunction, web3Addresses.memeMinter);
 }
 
 // --------- FACTORY ---------------------
 
 const factoryAbi = ABI.factory;
-const factoryContract = new ethers.Contract(config.web3Addresses.factory, factoryAbi, ethProvider);
+const factoryContract = new ethers.Contract(web3Addresses.factory, factoryAbi, ethProvider);
 const factoryCreatePairMethod = factoryAbi.find(({ name }) => name === 'createPair');
 
 function getCreatePairParams(memeTokenHash) {
   const encodedFunction = abiCoder.encodeFunctionCall(factoryCreatePairMethod, [memeTokenHash]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.factory);
+  return formTransactionObj(encodedFunction, web3Addresses.factory);
 }
 
 async function getMemePairAddress(memeTokenHash) {
@@ -268,7 +271,7 @@ const pairApproveMethod = pairAbi.find(({ name }) => name === 'approve');
 
 function getApprovePairTokensForRouterParams(pairAddress) {
   const encodedFunction = abiCoder.encodeFunctionCall(pairApproveMethod, [
-    config.web3Addresses.router,
+    web3Addresses.router,
     ethers.utils.hexlify(ethers.constants.MaxUint256),
   ]);
 
@@ -297,7 +300,7 @@ async function getPairAllowance(pairAddress, userAddress, spenderAddress) {
 // --------- ROUTER ---------------------
 
 const routerAbi = ABI.router;
-const routerContract = new ethers.Contract(config.web3Addresses.router, routerAbi, ethProvider);
+const routerContract = new ethers.Contract(web3Addresses.router, routerAbi, ethProvider);
 
 const routerAddLiquidityETHMethod = routerAbi.find(({ name }) => name === 'addLiquidityETH');
 function getAddLiquidityETHParams(
@@ -318,7 +321,7 @@ function getAddLiquidityETHParams(
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router, ethDeposit);
+  return formTransactionObj(encodedFunction, web3Addresses.router, ethDeposit);
 }
 
 const routerAddLiquidityTokenMethod = routerAbi.find(({ name }) => name === 'addLiquidity');
@@ -341,7 +344,7 @@ function getAddLiquidityTokenParams(
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router);
+  return formTransactionObj(encodedFunction, web3Addresses.router);
 }
 
 const routerRemoveLiquidityMethod = routerAbi.find(({ name }) => name === 'removeLiquidityGetExactTokensBack');
@@ -356,7 +359,7 @@ function getRemoveLiquidityParams(tokenHash, memeTokens, userAddress, returnETH)
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router);
+  return formTransactionObj(encodedFunction, web3Addresses.router);
 }
 
 const routerSwapExactBaseTokensForTokensMethod = routerAbi.find(({ name }) => name === 'swapExactBaseTokensForTokens');
@@ -370,7 +373,7 @@ function getSwapExactBaseTokensForTokensParams(tokenHash, exactEthAmountIn, minT
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router);
+  return formTransactionObj(encodedFunction, web3Addresses.router);
 }
 
 const routerSwapExactTokensForBaseTokensMethod = routerAbi.find(({ name }) => name === 'swapExactTokensForBaseTokens');
@@ -384,7 +387,7 @@ function getSwapExactTokensForBaseTokensParams(tokenHash, exactTokenAmountIn, mi
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router);
+  return formTransactionObj(encodedFunction, web3Addresses.router);
 }
 
 const routerSwapExactTokensForEthMethod = routerAbi.find(({ name }) => name === 'swapExactTokensForETH');
@@ -398,7 +401,7 @@ function getSwapExactTokensForEthParams(tokenHash, exactTokenAmountIn, minEthAmo
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router);
+  return formTransactionObj(encodedFunction, web3Addresses.router);
 }
 
 const routerSwapTokensForExactBaseTokensMethod = routerAbi.find(({ name }) => name === 'swapTokensForExactBaseTokens');
@@ -412,7 +415,7 @@ function getSwapTokensForExactBaseTokensParams(tokenHash, exactEthAmountOut, max
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router);
+  return formTransactionObj(encodedFunction, web3Addresses.router);
 }
 
 const routerSwapBaseTokensForExactTokensMethod = routerAbi.find(({ name }) => name === 'swapBaseTokensForExactTokens');
@@ -426,7 +429,7 @@ function getSwapBaseTokensForExactTokensParams(tokenHash, exactTokenAmountOut, m
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router);
+  return formTransactionObj(encodedFunction, web3Addresses.router);
 }
 
 const routerSwapEthForExactTokensMethod = routerAbi.find(({ name }) => name === 'swapETHForExactTokens');
@@ -439,7 +442,7 @@ function getSwapEthForExactTokensParams(tokenHash, exactTokenAmountOut, maxEthAm
     deadline,
   ]);
 
-  return formTransactionObj(encodedFunction, config.web3Addresses.router, maxEthAmountIn);
+  return formTransactionObj(encodedFunction, web3Addresses.router, maxEthAmountIn);
 }
 
 async function getTokenAmountIn(ethAmountOut, memeTokenHash) {
@@ -481,13 +484,36 @@ async function quoteAddressLiquidity(memeTokenHash, userAddress) {
     baseTokenAmount: new BigNumber(quote.baseTokenAmount.toString()),
   };
 }
+// ---------Balancer--------------------
+const bPoolAbi = ABI.bPool;
+
+const bindMethod = bPoolAbi.find(({name}) => name === 'bind');
+function getBind(bPoolAddress, tokenAddress, balance, denorm) {
+    const encodedFunction = abiCoder.encodeFunctionCall(bindMethod,[tokenAddress,balance,denorm]);
+    return formTransactionObj(encodedFunction, bPoolAddress);
+}
+
+const setPublicSwap = bPoolAbi.find(({name}) => name === 'setPublicSwap');
+function getSetPublicSwap(bPoolAddress, status) {
+    const encodedFunction = abiCoder.encodeFunctionCall(setPublicSwap,[status]);
+    return formTransactionObj(encodedFunction,bPoolAddress);
+}
+
+const swapExactAmountIn = bPoolAbi.find(({name}) => name === 'swapExactAmountIn');
+function getSwapExactAmountIn(bPoolAddress,tokenIn, tokenAmtIn, tokenOut, minAmtOut, maxPrice) {
+    const encodedFunction = abiCoder.encodeFunctionCall(
+        swapExactAmountIn,
+        [tokenIn,tokenAmtIn,minAmtOut,maxPrice]
+    );
+    return formTransactionObj(encodedFunction, bPoolAddress);
+}
 
 // --------- UTILS ---------------------
 
 function getMemeTokenHash(memeTokenId) {
   const packedParams = ethers.utils.solidityPack(
     ['address', 'uint256'],
-    [config.web3Addresses.memeMinter, memeTokenId],
+    [web3Addresses.memeMinter, memeTokenId],
   );
   return ethers.utils.keccak256(packedParams);
 }
@@ -495,63 +521,116 @@ function getMemeTokenHash(memeTokenId) {
 async function getMemeNextId() {
   const erc721Contract = new ethers.Contract(config.contracts.ERC721.address, erc721Abi, ethProvider);
 
-  const numTokens = await erc721Contract.balanceOf(config.web3Addresses.dispenser);
+  const numTokens = await erc721Contract.balanceOf(web3Addresses.dispenser);
   let nextId = 1;
   if (numTokens.toNumber() > 0) {
-    const lastId = await erc721Contract.tokenOfOwnerByIndex(config.web3Addresses.dispenser, numTokens.toNumber() - 1);
+    const lastId = await erc721Contract.tokenOfOwnerByIndex(web3Addresses.dispenser, numTokens.toNumber() - 1);
     nextId = lastId.toNumber() + 1;
   }
   return nextId;
 }
 
-module.exports = {
-  ZERO_ADDRESS: `0x${'0'.repeat(40)}`,
-  validateJson,
-  getTokenDefaultMultiplier,
-  calculateAvailableShards,
-  calculateShardsBuyPrice,
-  calculateShardsSellPrice,
-  fromWei,
-  toWei,
-  toBigNumber,
-  hexFromBigNumber,
-  filterResultData,
-  safeUnlink,
-  getNextId,
-  isValidAuthType,
-  getDefaultAuthType,
-  parseContractLogs,
-  addressesEqual,
-  transactionParams,
-  formTransactionObj,
-  getApproveBaseTokensForRouterParams,
-  getUserBalance,
-  getApproveDispenserForRouterParams,
-  getMintMemeParams,
-  getDepositMemeParams,
-  getCreatePairParams,
-  getReserves,
-  getApprovePairTokensForRouterParams,
-  getAddLiquidityETHParams,
-  getAddLiquidityTokenParams,
-  getRemoveLiquidityParams,
-  getLiquidityTokenBalance,
-  getSwapExactBaseTokensForTokensParams,
-  getSwapExactTokensForBaseTokensParams,
-  getSwapBaseTokensForExactTokensParams,
-  getSwapTokensForExactBaseTokensParams,
-  getSwapExactTokensForEthParams,
-  getSwapEthForExactTokensParams,
-  getMemeTokenHash,
-  getMemeTokenBalance,
-  getMemePairAddress,
-  getMemeNextId,
-  getTokenAmountIn,
-  getEthAmountIn,
-  getEthAmountOut,
-  getErc20Allowance,
-  getErc1155Allowance,
-  getPairAllowance,
-  getOwnerPairNonce,
-  quoteAddressLiquidity,
-};
+// FUNCTIONS TO CREATE MEMES, ADD/REMOVE LIQUIDITY
+async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress) {
+    const mintMemeParams = getMintMemeParams(userAddress, memeUniqueId);
+    const depositMemeParams = getDepositMemeParams(userAddress, memeUniqueId);
+  
+    const createPairParams = getCreatePairParams(memeTokenHash);
+  
+    const transactionQueue = [
+      {
+        params: mintMemeParams,
+        type: TRANSACTION_TYPE.MINT,
+      },
+      {
+        params: depositMemeParams,
+        type: TRANSACTION_TYPE.TRANSFER,
+      },
+      {
+        params: createPairParams,
+        type: TRANSACTION_TYPE.CREATE_PAIR,
+      },
+    ];
+
+    return transactionQueue;
+  }
+  
+  async function addLiquidityTransactions(
+    userId,
+    memeId,
+    memeTokenHash,
+    memeTokenDeposit,
+    ethDeposit,
+    memeTokenMinDeposit,
+    ethMinDeposit,
+    userAddress,
+  ) {
+    let addLiquidityParams;
+    const ethAsMainToken = !config.mainToken;
+  
+    if (ethAsMainToken) {
+      addLiquidityParams = getAddLiquidityETHParams(
+        memeTokenHash,
+        memeTokenDeposit,
+        ethDeposit,
+        memeTokenMinDeposit,
+        ethMinDeposit,
+        userAddress,
+      );
+    } else {
+      addLiquidityParams = getAddLiquidityTokenParams(
+        memeTokenHash,
+        memeTokenDeposit,
+        ethDeposit,
+        memeTokenMinDeposit,
+        ethMinDeposit,
+        userAddress,
+      );
+    }
+  
+    const mainTokenAllowance = [];
+    if (!ethAsMainToken) {
+      mainTokenAllowance.push({
+        spenderAddress: web3Addresses.router,
+        contractAddress: config.mainToken,
+        contractType: CONTRACT_TYPE.ERC20,
+      });
+    }
+  
+    const transactionQueue = [
+      {
+        params: addLiquidityParams,
+        type: TRANSACTION_TYPE.ADD_LIQUIDITY,
+        allowance: [
+          ...mainTokenAllowance,
+          {
+            spenderAddress: web3Addresses.router,
+            contractAddress: web3Addresses.dispenser,
+            contractType: CONTRACT_TYPE.ERC1155,
+          },
+        ],
+      },
+    ];
+  
+    return transactionQueue;
+  }
+  
+  async function removeLiquidityTransactions(userId, memeId, memeTokenHash, pairAddress, memeTokens, senderAddress) {
+    const returnETH = !config.mainToken;
+    const removeLiquidityParams = getRemoveLiquidityParams(memeTokenHash, memeTokens, senderAddress, returnETH);
+    const transactionQueue = [
+      {
+        params: removeLiquidityParams,
+        type: TRANSACTION_TYPE.REMOVE_LIQUIDITY,
+        allowance: [
+          {
+            spenderAddress: web3Addresses.router,
+            contractAddress: pairAddress,
+            contractType: CONTRACT_TYPE.PAIR,
+          },
+        ],
+      },
+    ];
+  
+    return transactionQueue;
+  }
