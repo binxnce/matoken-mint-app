@@ -233,7 +233,7 @@ const Form = ({
     validateInitialCopies();
     validateOnHoldPool();
 
-    if (name && description && file && imgHash && track1) {
+    if (name && description && file && imgHash) {
       // Upload JSON to IPFS
       let ipfsHash = "";
       try {
