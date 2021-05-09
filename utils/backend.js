@@ -429,7 +429,6 @@ async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress) 
         ethMinDeposit,
         userAddress,
       );
-    }
   
     const transactionQueue = [
       {
