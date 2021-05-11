@@ -32,3 +32,7 @@ export const pinFileToIPFS = (file) => {
     .then((response) => response.data.IpfsHash)
     .catch((error) => console.error(error));
 };
+
+export const getMatokenJSONFromIPFS = (MatokenID) => {
+  
+};

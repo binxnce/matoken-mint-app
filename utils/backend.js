@@ -75,7 +75,7 @@ const erc721MintMethod = erc721Abi.find(({ name }) => name === 'publicMint');
 
 // uniqueId - uint256 unique hex
 function getMintMemeParams(userAddress, uniqueId) {
-  const encodedFunction = abiCoder.encodeFunctionCall(erc721MintMethod, [userAddress, uniqueId]);
+  const encodedFunction = abiCoder.encodeFunctionCall(erc721MintMethod, [userAddress, uniqueId, tokenURI]);
 
   return formTransactionObj(encodedFunction, web3Addresses.memeMinter);
 }
@@ -392,8 +392,8 @@ async function getMemeNextId() {
   return nextId;
 }
 
-async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress) {
-    const mintMemeParams = getMintMemeParams(userAddress, memeUniqueId);
+async function createMemeTransactions(memeUniqueId, memeTokenHash, userAddress, tokenURI) {
+    const mintMemeParams = getMintMemeParams(userAddress, memeUniqueId, tokenURI);
     const depositMemeParams = getDepositMemeParams(userAddress, memeUniqueId);
   
     const createPairParams = getCreatePairParams(memeTokenHash);

@@ -318,7 +318,7 @@ const Form = ({
       const memeId = await getMemeNextId();
       const memeTokenHash = await getMemeTokenHash(memeId);
 
-      const txs = await createMemeTransactions(memeId, memeTokenHash, account);
+      const txs = await createMemeTransactions(memeId, memeTokenHash, account, ipfsHash);
       for (const { params } of txs) {
         console.log(JSON.stringify(params));
         await provider
