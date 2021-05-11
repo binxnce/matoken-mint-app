@@ -74,7 +74,7 @@ const erc721Abi = ABI.erc721;
 const erc721MintMethod = erc721Abi.find(({ name }) => name === 'publicMint');
 
 // uniqueId - uint256 unique hex
-function getMintMemeParams(userAddress, uniqueId) {
+function getMintMemeParams(userAddress, uniqueId, tokenURI = '') {
   const encodedFunction = abiCoder.encodeFunctionCall(erc721MintMethod, [userAddress, uniqueId, tokenURI]);
 
   return formTransactionObj(encodedFunction, web3Addresses.memeMinter);
